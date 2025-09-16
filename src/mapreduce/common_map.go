@@ -20,7 +20,7 @@ func doMap(
 
 	// STEP 1: read the whole input file for this task
 
-	debug("[DOMAP #%d] starting", mapTaskNumber)
+	debug("[DOMAP #%d] starting\n", mapTaskNumber)
 
 	bytes, err := os.ReadFile(inFile) // returns byte []
 
@@ -74,7 +74,7 @@ func doMap(
 			fmt.Printf("[DOMAP] error encoding file %v\n", err)
 		}
 	}
-	debug("[DOMAP #%d] successfully completed", mapTaskNumber)
+	debug("[DOMAP #%d] successfully completed\n", mapTaskNumber)
 }
 
 func ihash(s string) uint32 {
