@@ -4,7 +4,8 @@ import (
 	"encoding/json" // for the json objects
 	"fmt"           // for printing
 	"hash/fnv"
-	"os" // so i can read and make files and stuff
+	"io/ioutil" // ugh need for submission and grading
+	"os"        // so i can read and make files and stuff
 )
 
 // doMap does the job of a map worker: it reads one of the input files
@@ -22,7 +23,7 @@ func doMap(
 
 	debug("[DOMAP #%d] starting\n", mapTaskNumber)
 
-	bytes, err := os.ReadFile(inFile) // returns byte []
+	bytes, err := ioutil.ReadFile(inFile) // returns byte []
 
 	if err != nil {
 		fmt.Printf("[DOMAP]error reading file [%s]: %v\n", inFile, err)
