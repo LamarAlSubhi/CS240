@@ -40,7 +40,8 @@ func doReduce(
 			if err := dec.Decode(&kv); err == io.EOF {
 				break
 			} else if err != nil {
-				fmt.Printf("[DOREDUCE] decode %s: %v\n", rname, err)
+				fmt.Printf("[DOREDUCE] couldn't decode %s: %v\n", rname, err)
+				break // stop decoding
 			}
 
 			// STEP 2: build a bucket map by appending each record’s value under its key
