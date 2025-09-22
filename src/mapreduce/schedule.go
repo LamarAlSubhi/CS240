@@ -16,8 +16,6 @@ func (mr *Master) schedule(phase jobPhase) {
 	// im making a channel that will be populated with true for every done task
 	doneChan := make(chan bool, ntasks)
 
-	file := "" // initializing file arg for DoTaskArgs struct
-
 	debug("Schedule: %v %v tasks (%d I/Os)\n", ntasks, phase, nios)
 
 	for task := 0; task < ntasks; task++ {
@@ -26,19 +24,20 @@ func (mr *Master) schedule(phase jobPhase) {
 		go func() {
 
 			// setting up DoTaskArgs
+			file := "" // initializing file arg for DoTaskArgs struct
 			if phase == mapPhase {
 				// use the task number as index for files
 				file = mr.files[task]
 			}
 			args := DoTaskArgs{JobName: mr.jobName, File: file, Phase: phase, TaskNumber: task, NumOtherPhase: nios}
-			reply := new(struct{}) // just emptyx
+			reply := new(struct{}) // just empty
 
 			for {
 				// 	STEP1: grab woker from channel
 				worker := <-mr.registerChannel
 
 				// STEP2: send worker an RPC to DoTask
-				debug("calling worker %v\n", worker)
+				debug("[SCHEDULE]calling worker %v\n", worker)
 				ok := call(worker, "Worker.DoTask", &args, reply)
 
 				if ok {
@@ -48,7 +47,7 @@ func (mr *Master) schedule(phase jobPhase) {
 					return
 				}
 				// otherwise, retry by looping again
-				debug("worker %v failed task %v, retrying...\n", worker, args.TaskNumber)
+				debug("[SCHEDULE]worker %v failed task %v, retrying...\n", worker, args.TaskNumber)
 			}
 		}()
 	}
