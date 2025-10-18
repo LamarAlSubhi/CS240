@@ -34,3 +34,6 @@ i need a way to communicate the following:
 
 - when leaders win an election (to followers),
 - when leaders apply a message (to client),
+
+
+### logs
