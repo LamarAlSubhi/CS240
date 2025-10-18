@@ -1,0 +1,1713 @@
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 1 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=1
+[1]: stepped down to follower, term=1
+[0]: I just voted for {2} in term #1
+[1]: I just voted for {2} in term #1
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #1
+[2]: sending heartbeat to {0} for term #1
+[1]: heartbeat recieved from {2} in term #1
+[0]: heartbeat recieved from {2} in term #1
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (true) in term #1
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (true) in term #1
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 2 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=2
+[2]: stepped down to follower, term=2
+[0]: I just voted for {1} in term #2
+[2]: I just voted for {1} in term #2
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #2
+[1]: sending heartbeat to {0} for term #2
+[2]: heartbeat recieved from {1} in term #2
+[2]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: heartbeat recieved from {1} in term #2
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #2
+[1]: im being asked if im a leader (true) in term #2
+[2]: im being asked if im a leader (false) in term #2
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 3 (I have 3 peers)
+[1]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: I'm being asked to vote
+[1]: stepped down to follower, term=3
+[1]: I just voted for {2} in term #3
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (RequestVote)
+[0]: stepped down to follower, term=3
+[0]: I just voted for {2} in term #3
+[2]: I am now a leader in term #3 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: just reset my election timer by (RequestVote)
+[2]: sending heartbeat to {1} for term #3
+[2]: sending heartbeat to {0} for term #3
+[0]: heartbeat recieved from {2} in term #3
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[1]: heartbeat recieved from {2} in term #3
+[1]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 4 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=4
+[1]: stepped down to follower, term=4
+[2]: I just voted for {0} in term #4
+[1]: I just voted for {0} in term #4
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #4 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #4
+[0]: sending heartbeat to {1} for term #4
+[2]: heartbeat recieved from {0} in term #4
+[2]: my state is {follower}
+[1]: heartbeat recieved from {0} in term #4
+[2]: just reset my election timer by (Heartbeat)
+[1]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 1 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=1
+[2]: stepped down to follower, term=1
+[0]: I just voted for {1} in term #1
+[2]: I just voted for {1} in term #1
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #1
+[1]: sending heartbeat to {0} for term #1
+[2]: heartbeat recieved from {1} in term #1
+[0]: heartbeat recieved from {1} in term #1
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[0]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 5 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=5
+[2]: stepped down to follower, term=5
+[0]: I just voted for {1} in term #5
+[2]: I just voted for {1} in term #5
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #5 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #5
+[1]: sending heartbeat to {0} for term #5
+[2]: heartbeat recieved from {1} in term #5
+[2]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: heartbeat recieved from {1} in term #5
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 2 (I have 3 peers)
+[2]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=2
+[2]: I just voted for {0} in term #2
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #2
+[0]: sending heartbeat to {1} for term #2
+[2]: heartbeat recieved from {0} in term #2
+[2]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #2
+[2]: im being asked if im a leader (false) in term #2
+[0]: im being asked if im a leader (true) in term #2
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #2
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 3 (I have 3 peers)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 6 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=6
+[0]: stepped down to follower, term=6
+[1]: I just voted for {2} in term #6
+[0]: I just voted for {2} in term #6
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #6 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #6
+[2]: sending heartbeat to {0} for term #6
+[1]: heartbeat recieved from {2} in term #6
+[0]: heartbeat recieved from {2} in term #6
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: my call failed
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 4 (I have 3 peers)
+[0]: my call failed
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 7 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=7
+[0]: stepped down to follower, term=7
+[2]: I just voted for {1} in term #7
+[0]: I just voted for {1} in term #7
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #7 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #7
+[1]: sending heartbeat to {0} for term #7
+[2]: heartbeat recieved from {1} in term #7
+[0]: heartbeat recieved from {1} in term #7
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: im being asked if im a leader (false) in term #4
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #4
+[0]: im being asked if im a leader (true) in term #2
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #4
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 5 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=5
+[0]: stepped down to follower, term=5
+[1]: I just voted for {2} in term #5
+[0]: I just voted for {2} in term #5
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #5 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #5
+[2]: sending heartbeat to {0} for term #5
+[1]: heartbeat recieved from {2} in term #5
+[0]: heartbeat recieved from {2} in term #5
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 8 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=8
+[1]: stepped down to follower, term=8
+[2]: I just voted for {0} in term #8
+[1]: I just voted for {0} in term #8
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #8 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #8
+[0]: sending heartbeat to {1} for term #8
+[2]: heartbeat recieved from {0} in term #8
+[1]: heartbeat recieved from {0} in term #8
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 1 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=1
+[0]: stepped down to follower, term=1
+[1]: I just voted for {2} in term #1
+[0]: I just voted for {2} in term #1
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #1
+[2]: sending heartbeat to {0} for term #1
+[1]: heartbeat recieved from {2} in term #1
+[0]: heartbeat recieved from {2} in term #1
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (true) in term #1
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (true) in term #1
+[2]: my call failed
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 6 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=6
+[0]: stepped down to follower, term=6
+[2]: I just voted for {1} in term #6
+[0]: I just voted for {1} in term #6
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #6 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #6
+[1]: sending heartbeat to {0} for term #6
+[2]: heartbeat recieved from {1} in term #6
+[0]: heartbeat recieved from {1} in term #6
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 9 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=9
+[0]: stepped down to follower, term=9
+[2]: I just voted for {1} in term #9
+[0]: I just voted for {1} in term #9
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #9 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: election timeout
+[1]: sending heartbeat to {2} for term #9
+[1]: sending heartbeat to {0} for term #9
+[1]: just reset my election timer by (StartElection)
+[2]: heartbeat recieved from {1} in term #9
+[0]: heartbeat recieved from {1} in term #9
+[1]: starting election for term 2 (I have 3 peers)
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[0]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=2
+[2]: stepped down to follower, term=2
+[0]: I just voted for {1} in term #2
+[2]: I just voted for {1} in term #2
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #2
+[1]: sending heartbeat to {0} for term #2
+[2]: heartbeat recieved from {1} in term #2
+[0]: heartbeat recieved from {1} in term #2
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 7 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=7
+[2]: stepped down to follower, term=7
+[1]: I just voted for {0} in term #7
+[2]: I just voted for {0} in term #7
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #7 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #7
+[0]: sending heartbeat to {1} for term #7
+[2]: heartbeat recieved from {0} in term #7
+[1]: heartbeat recieved from {0} in term #7
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[2]: my call failed
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 10 (I have 3 peers)
+[2]: my call failed
+[2]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: I'm being asked to vote
+[2]: stepped down to follower, term=10
+[2]: I just voted for {0} in term #10
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (RequestVote)
+[1]: stepped down to follower, term=10
+[1]: I just voted for {0} in term #10
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #10 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #10
+[0]: sending heartbeat to {1} for term #10
+[2]: heartbeat recieved from {0} in term #10
+[1]: heartbeat recieved from {0} in term #10
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #2
+[1]: im being asked if im a leader (true) in term #2
+[2]: im being asked if im a leader (false) in term #2
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 3 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=3
+[1]: stepped down to follower, term=3
+[2]: I just voted for {0} in term #3
+[1]: I just voted for {0} in term #3
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #3 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #3
+[0]: sending heartbeat to {1} for term #3
+[2]: heartbeat recieved from {0} in term #3
+[1]: heartbeat recieved from {0} in term #3
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 8 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=8
+[1]: stepped down to follower, term=8
+[0]: I just voted for {2} in term #8
+[1]: I just voted for {2} in term #8
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #8 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #8
+[2]: sending heartbeat to {0} for term #8
+[1]: heartbeat recieved from {2} in term #8
+[0]: heartbeat recieved from {2} in term #8
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 1 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=1
+[0]: stepped down to follower, term=1
+[2]: I just voted for {1} in term #1
+[0]: I just voted for {1} in term #1
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #1
+[1]: sending heartbeat to {0} for term #1
+[2]: heartbeat recieved from {1} in term #1
+[0]: heartbeat recieved from {1} in term #1
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 11 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=11
+[2]: stepped down to follower, term=11
+[0]: I just voted for {1} in term #11
+[2]: I just voted for {1} in term #11
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #11 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #11
+[1]: sending heartbeat to {0} for term #11
+[2]: heartbeat recieved from {1} in term #11
+[0]: heartbeat recieved from {1} in term #11
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 4 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=4
+[0]: stepped down to follower, term=4
+[2]: I just voted for {1} in term #4
+[0]: I just voted for {1} in term #4
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #4 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #4
+[1]: sending heartbeat to {0} for term #4
+[2]: heartbeat recieved from {1} in term #4
+[0]: heartbeat recieved from {1} in term #4
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 12 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=12
+[0]: stepped down to follower, term=12
+[1]: I just voted for {2} in term #12
+[0]: I just voted for {2} in term #12
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #12 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #12
+[2]: sending heartbeat to {0} for term #12
+[1]: heartbeat recieved from {2} in term #12
+[0]: heartbeat recieved from {2} in term #12
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 2 (I have 3 peers)
+[2]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=2
+[2]: I just voted for {0} in term #2
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #2
+[0]: sending heartbeat to {1} for term #2
+[2]: heartbeat recieved from {0} in term #2
+[2]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 9 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=9
+[1]: stepped down to follower, term=9
+[2]: I just voted for {0} in term #9
+[1]: I just voted for {0} in term #9
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #9 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #9
+[0]: sending heartbeat to {1} for term #9
+[2]: heartbeat recieved from {0} in term #9
+[2]: my state is {follower}
+[1]: heartbeat recieved from {0} in term #9
+[2]: just reset my election timer by (Heartbeat)
+[1]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 5 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=5
+[0]: stepped down to follower, term=5
+[1]: I just voted for {2} in term #5
+[0]: I just voted for {2} in term #5
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #5 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #5
+[2]: sending heartbeat to {0} for term #5
+[1]: heartbeat recieved from {2} in term #5
+[0]: heartbeat recieved from {2} in term #5
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #2
+[2]: im being asked if im a leader (false) in term #2
+[0]: im being asked if im a leader (true) in term #2
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #2
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 10 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=10
+[2]: stepped down to follower, term=10
+[0]: I just voted for {1} in term #10
+[2]: I just voted for {1} in term #10
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #10 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #10
+[1]: sending heartbeat to {0} for term #10
+[2]: heartbeat recieved from {1} in term #10
+[2]: my state is {follower}
+[0]: heartbeat recieved from {1} in term #10
+[2]: just reset my election timer by (Heartbeat)
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 13 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=13
+[1]: stepped down to follower, term=13
+[2]: I just voted for {0} in term #13
+[1]: I just voted for {0} in term #13
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #13 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #13
+[0]: sending heartbeat to {1} for term #13
+[2]: heartbeat recieved from {0} in term #13
+[1]: heartbeat recieved from {0} in term #13
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 6 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=6
+[2]: stepped down to follower, term=6
+[1]: I just voted for {0} in term #6
+[2]: I just voted for {0} in term #6
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #6 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #6
+[0]: sending heartbeat to {1} for term #6
+[2]: heartbeat recieved from {0} in term #6
+[1]: heartbeat recieved from {0} in term #6
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 3 (I have 3 peers)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 7 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=7
+[0]: stepped down to follower, term=7
+[1]: I just voted for {2} in term #7
+[0]: I just voted for {2} in term #7
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #7 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #7
+[2]: sending heartbeat to {0} for term #7
+[1]: heartbeat recieved from {2} in term #7
+[0]: heartbeat recieved from {2} in term #7
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 14 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=14
+[1]: I just voted for {2} in term #14
+[0]: stepped down to follower, term=14
+[1]: just reset my election timer by (RequestVote)
+[0]: I just voted for {2} in term #14
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #14 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #14
+[2]: sending heartbeat to {0} for term #14
+[1]: heartbeat recieved from {2} in term #14
+[1]: my state is {follower}
+[0]: heartbeat recieved from {2} in term #14
+[1]: just reset my election timer by (Heartbeat)
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[2]: im being asked if im a leader (false) in term #3
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 11 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=11
+[1]: stepped down to follower, term=11
+[2]: I just voted for {0} in term #11
+[1]: I just voted for {0} in term #11
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #11 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #11
+[0]: sending heartbeat to {1} for term #11
+[2]: heartbeat recieved from {0} in term #11
+[1]: heartbeat recieved from {0} in term #11
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: my call failed
+[1]: im being asked if im a leader (true) in term #1
+[2]: im being asked if im a leader (false) in term #3
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 4 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=4
+[0]: stepped down to follower, term=4
+[1]: I just voted for {2} in term #4
+[0]: I just voted for {2} in term #4
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #4 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #4
+[2]: sending heartbeat to {0} for term #4
+[1]: heartbeat recieved from {2} in term #4
+[0]: heartbeat recieved from {2} in term #4
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 15 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=15
+[0]: stepped down to follower, term=15
+[2]: I just voted for {1} in term #15
+[0]: I just voted for {1} in term #15
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #15 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #15
+[1]: sending heartbeat to {0} for term #15
+[2]: heartbeat recieved from {1} in term #15
+[0]: heartbeat recieved from {1} in term #15
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #4
+[1]: im being asked if im a leader (false) in term #4
+[2]: im being asked if im a leader (true) in term #4
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 8 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=8
+[1]: stepped down to follower, term=8
+[2]: I just voted for {0} in term #8
+[1]: I just voted for {0} in term #8
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #8 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #8
+[0]: sending heartbeat to {1} for term #8
+[2]: heartbeat recieved from {0} in term #8
+[1]: heartbeat recieved from {0} in term #8
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 12 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=12
+[1]: stepped down to follower, term=12
+[0]: I just voted for {2} in term #12
+[1]: I just voted for {2} in term #12
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #12 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #12
+[2]: sending heartbeat to {0} for term #12
+[1]: heartbeat recieved from {2} in term #12
+[0]: heartbeat recieved from {2} in term #12
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[1]: election timeout
+[0]: election timeout
+[1]: just reset my election timer by (StartElection)
+[0]: just reset my election timer by (StartElection)
+[1]: starting election for term 5 (I have 3 peers)
+[0]: starting election for term 1 (I have 3 peers)
+[2]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=5
+[2]: stepped down to follower, term=1
+[1]: stepped down to follower, term=1
+[0]: stepped down to follower, term=5
+[2]: I just voted for {1} in term #5
+[2]: I just voted for {0} in term #1
+[1]: I just voted for {0} in term #1
+[0]: I just voted for {1} in term #5
+[2]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #5 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #5
+[1]: sending heartbeat to {0} for term #5
+[0]: sending heartbeat to {2} for term #1
+[0]: sending heartbeat to {1} for term #1
+[2]: heartbeat recieved from {1} in term #5
+[0]: heartbeat recieved from {1} in term #5
+[2]: my state is {follower}
+[2]: heartbeat recieved from {0} in term #1
+[1]: heartbeat recieved from {0} in term #1
+[2]: just reset my election timer by (Heartbeat)
+[0]: my state is {follower}
+[1]: my state is {follower}
+[2]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 9 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=9
+[2]: stepped down to follower, term=9
+[0]: I just voted for {1} in term #9
+[2]: I just voted for {1} in term #9
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #9 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #9
+[1]: sending heartbeat to {0} for term #9
+[2]: heartbeat recieved from {1} in term #9
+[0]: heartbeat recieved from {1} in term #9
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 16 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=16
+[2]: stepped down to follower, term=16
+[1]: I just voted for {0} in term #16
+[2]: I just voted for {0} in term #16
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #16 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #16
+[0]: sending heartbeat to {1} for term #16
+[2]: heartbeat recieved from {0} in term #16
+[1]: heartbeat recieved from {0} in term #16
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[0]: im being asked if im a leader (true) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 13 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=13
+[2]: stepped down to follower, term=13
+[1]: I just voted for {0} in term #13
+[2]: I just voted for {0} in term #13
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #13 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #13
+[0]: sending heartbeat to {1} for term #13
+[2]: heartbeat recieved from {0} in term #13
+[1]: heartbeat recieved from {0} in term #13
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 17 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=17
+[1]: stepped down to follower, term=17
+[0]: I just voted for {2} in term #17
+[1]: I just voted for {2} in term #17
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #17 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #17
+[2]: sending heartbeat to {0} for term #17
+[1]: heartbeat recieved from {2} in term #17
+[0]: heartbeat recieved from {2} in term #17
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 10 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=10
+[0]: stepped down to follower, term=10
+[1]: I just voted for {2} in term #10
+[0]: I just voted for {2} in term #10
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #10 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #10
+[2]: sending heartbeat to {0} for term #10
+[1]: heartbeat recieved from {2} in term #10
+[0]: heartbeat recieved from {2} in term #10
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 6 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=6
+[1]: stepped down to follower, term=6
+[0]: I just voted for {2} in term #6
+[1]: I just voted for {2} in term #6
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #6 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #6
+[2]: sending heartbeat to {0} for term #6
+[1]: heartbeat recieved from {2} in term #6
+[0]: heartbeat recieved from {2} in term #6
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 2 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=2
+[2]: stepped down to follower, term=2
+[0]: I just voted for {1} in term #2
+[2]: I just voted for {1} in term #2
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #2
+[1]: sending heartbeat to {0} for term #2
+[2]: heartbeat recieved from {1} in term #2
+[0]: heartbeat recieved from {1} in term #2
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 14 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=14
+[0]: stepped down to follower, term=14
+[1]: I just voted for {2} in term #14
+[0]: I just voted for {2} in term #14
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #14 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #14
+[2]: sending heartbeat to {0} for term #14
+[1]: heartbeat recieved from {2} in term #14
+[0]: heartbeat recieved from {2} in term #14
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #2
+[1]: im being asked if im a leader (true) in term #2
+[2]: im being asked if im a leader (false) in term #2
+[0]: I've been created :D
+[0]: created election timer (Make)
+[0]: I've been created :D
+[1]: created election timer (Make)
+[0]: I've been created :D
+[2]: created election timer (Make)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 18 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=18
+[0]: stepped down to follower, term=18
+[2]: I just voted for {1} in term #18
+[0]: I just voted for {1} in term #18
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #18 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #18
+[1]: sending heartbeat to {0} for term #18
+[2]: heartbeat recieved from {1} in term #18
+[0]: heartbeat recieved from {1} in term #18
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 11 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=11
+[1]: stepped down to follower, term=11
+[2]: I just voted for {0} in term #11
+[1]: I just voted for {0} in term #11
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #11 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {1} for term #11
+[0]: sending heartbeat to {2} for term #11
+[1]: heartbeat recieved from {0} in term #11
+[2]: heartbeat recieved from {0} in term #11
+[1]: my state is {follower}
+[2]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[2]: just reset my election timer by (Heartbeat)
+[2]: my call failed
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 3 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=3
+[0]: stepped down to follower, term=3
+[1]: I just voted for {2} in term #3
+[0]: I just voted for {2} in term #3
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #3 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #3
+[2]: sending heartbeat to {0} for term #3
+[1]: heartbeat recieved from {2} in term #3
+[0]: heartbeat recieved from {2} in term #3
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 7 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=7
+[0]: stepped down to follower, term=7
+[2]: I just voted for {1} in term #7
+[0]: I just voted for {1} in term #7
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #7 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #7
+[1]: sending heartbeat to {0} for term #7
+[2]: heartbeat recieved from {1} in term #7
+[0]: heartbeat recieved from {1} in term #7
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 15 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=15
+[2]: stepped down to follower, term=15
+[1]: I just voted for {0} in term #15
+[2]: I just voted for {0} in term #15
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #15 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #15
+[0]: sending heartbeat to {1} for term #15
+[2]: heartbeat recieved from {0} in term #15
+[1]: heartbeat recieved from {0} in term #15
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #0
+[1]: im being asked if im a leader (false) in term #0
+[2]: im being asked if im a leader (false) in term #0
+[2]: my call failed
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 1 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=1
+[1]: stepped down to follower, term=1
+[2]: I just voted for {0} in term #1
+[1]: I just voted for {0} in term #1
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #1 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #1
+[0]: sending heartbeat to {1} for term #1
+[2]: heartbeat recieved from {0} in term #1
+[1]: heartbeat recieved from {0} in term #1
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 12 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=12
+[1]: stepped down to follower, term=12
+[0]: I just voted for {2} in term #12
+[1]: I just voted for {2} in term #12
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #12 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #12
+[2]: sending heartbeat to {0} for term #12
+[1]: heartbeat recieved from {2} in term #12
+[0]: heartbeat recieved from {2} in term #12
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #1
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 19 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=19
+[2]: I just voted for {0} in term #19
+[1]: stepped down to follower, term=19
+[2]: just reset my election timer by (RequestVote)
+[1]: I just voted for {0} in term #19
+[0]: I am now a leader in term #19 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: just reset my election timer by (RequestVote)
+[0]: sending heartbeat to {1} for term #19
+[0]: sending heartbeat to {2} for term #19
+[1]: heartbeat recieved from {0} in term #19
+[2]: heartbeat recieved from {0} in term #19
+[1]: my state is {follower}
+[2]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[2]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 4 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=4
+[2]: stepped down to follower, term=4
+[0]: I just voted for {1} in term #4
+[2]: I just voted for {1} in term #4
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #4 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #4
+[1]: sending heartbeat to {0} for term #4
+[2]: heartbeat recieved from {1} in term #4
+[0]: heartbeat recieved from {1} in term #4
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: im being asked if im a leader (false) in term #1
+[2]: im being asked if im a leader (false) in term #1
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 8 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=8
+[0]: stepped down to follower, term=8
+[1]: I just voted for {2} in term #8
+[0]: I just voted for {2} in term #8
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #8 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #8
+[2]: sending heartbeat to {0} for term #8
+[1]: heartbeat recieved from {2} in term #8
+[0]: heartbeat recieved from {2} in term #8
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 16 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=16
+[0]: stepped down to follower, term=16
+[2]: I just voted for {1} in term #16
+[0]: I just voted for {1} in term #16
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #16 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #16
+[1]: sending heartbeat to {0} for term #16
+[2]: heartbeat recieved from {1} in term #16
+[2]: my state is {follower}
+[0]: heartbeat recieved from {1} in term #16
+[2]: just reset my election timer by (Heartbeat)
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 2 (I have 3 peers)
+[1]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=2
+[1]: I just voted for {2} in term #2
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #2 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #2
+[2]: sending heartbeat to {0} for term #2
+[1]: heartbeat recieved from {2} in term #2
+[1]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[1]: im being asked if im a leader (false) in term #2
+[2]: im being asked if im a leader (true) in term #2
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 13 (I have 3 peers)
+[0]: I'm being asked to vote
+[2]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=13
+[2]: stepped down to follower, term=13
+[0]: I just voted for {1} in term #13
+[2]: I just voted for {1} in term #13
+[0]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #13 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #13
+[1]: sending heartbeat to {0} for term #13
+[2]: heartbeat recieved from {1} in term #13
+[0]: heartbeat recieved from {1} in term #13
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #1
+[1]: im being asked if im a leader (false) in term #2
+[2]: im being asked if im a leader (true) in term #2
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 20 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=20
+[0]: stepped down to follower, term=20
+[2]: I just voted for {1} in term #20
+[0]: I just voted for {1} in term #20
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #20 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #20
+[1]: sending heartbeat to {0} for term #20
+[2]: heartbeat recieved from {1} in term #20
+[0]: heartbeat recieved from {1} in term #20
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 17 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=17
+[0]: stepped down to follower, term=17
+[1]: I just voted for {2} in term #17
+[0]: I just voted for {2} in term #17
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #17 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #17
+[2]: sending heartbeat to {0} for term #17
+[1]: heartbeat recieved from {2} in term #17
+[0]: heartbeat recieved from {2} in term #17
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 5 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=5
+[0]: stepped down to follower, term=5
+[1]: I just voted for {2} in term #5
+[0]: I just voted for {2} in term #5
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #5 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #5
+[2]: sending heartbeat to {0} for term #5
+[1]: heartbeat recieved from {2} in term #5
+[1]: my state is {follower}
+[0]: heartbeat recieved from {2} in term #5
+[1]: just reset my election timer by (Heartbeat)
+[0]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 9 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=9
+[0]: stepped down to follower, term=9
+[2]: I just voted for {1} in term #9
+[0]: I just voted for {1} in term #9
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #9 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #9
+[1]: sending heartbeat to {0} for term #9
+[2]: heartbeat recieved from {1} in term #9
+[0]: heartbeat recieved from {1} in term #9
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 14 (I have 3 peers)
+[0]: I'm being asked to vote
+[1]: I'm being asked to vote
+[0]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[0]: stepped down to follower, term=14
+[1]: stepped down to follower, term=14
+[0]: I just voted for {2} in term #14
+[1]: I just voted for {2} in term #14
+[0]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #14 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #14
+[2]: sending heartbeat to {0} for term #14
+[1]: heartbeat recieved from {2} in term #14
+[0]: heartbeat recieved from {2} in term #14
+[1]: my state is {follower}
+[0]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 3 (I have 3 peers)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 21 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=21
+[1]: stepped down to follower, term=21
+[2]: I just voted for {0} in term #21
+[1]: I just voted for {0} in term #21
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #21 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #21
+[0]: sending heartbeat to {1} for term #21
+[2]: heartbeat recieved from {0} in term #21
+[1]: heartbeat recieved from {0} in term #21
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 6 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=6
+[1]: stepped down to follower, term=6
+[2]: I just voted for {0} in term #6
+[1]: I just voted for {0} in term #6
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #6 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #6
+[0]: sending heartbeat to {1} for term #6
+[2]: heartbeat recieved from {0} in term #6
+[2]: my state is {follower}
+[1]: heartbeat recieved from {0} in term #6
+[2]: just reset my election timer by (Heartbeat)
+[1]: my state is {follower}
+[1]: just reset my election timer by (Heartbeat)
+[1]: im being asked if im a leader (false) in term #3
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 18 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=18
+[0]: stepped down to follower, term=18
+[2]: I just voted for {1} in term #18
+[0]: I just voted for {1} in term #18
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #18 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #18
+[1]: sending heartbeat to {0} for term #18
+[2]: heartbeat recieved from {1} in term #18
+[0]: heartbeat recieved from {1} in term #18
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 10 (I have 3 peers)
+[2]: I'm being asked to vote
+[1]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[1]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=10
+[1]: stepped down to follower, term=10
+[2]: I just voted for {0} in term #10
+[1]: I just voted for {0} in term #10
+[2]: just reset my election timer by (RequestVote)
+[1]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #10 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #10
+[0]: sending heartbeat to {1} for term #10
+[2]: heartbeat recieved from {0} in term #10
+[1]: heartbeat recieved from {0} in term #10
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (true) in term #1
+[1]: im being asked if im a leader (false) in term #3
+[0]: election timeout
+[0]: just reset my election timer by (StartElection)
+[0]: starting election for term 15 (I have 3 peers)
+[1]: I'm being asked to vote
+[2]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[2]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=15
+[2]: stepped down to follower, term=15
+[1]: I just voted for {0} in term #15
+[2]: I just voted for {0} in term #15
+[1]: just reset my election timer by (RequestVote)
+[2]: just reset my election timer by (RequestVote)
+[0]: I am now a leader in term #15 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[0]: sending heartbeat to {2} for term #15
+[0]: sending heartbeat to {1} for term #15
+[2]: heartbeat recieved from {0} in term #15
+[1]: heartbeat recieved from {0} in term #15
+[2]: my state is {follower}
+[1]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[2]: election timeout
+[2]: just reset my election timer by (StartElection)
+[2]: starting election for term 22 (I have 3 peers)
+[1]: I'm being asked to vote
+[0]: I'm being asked to vote
+[1]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[1]: stepped down to follower, term=22
+[0]: stepped down to follower, term=22
+[1]: I just voted for {2} in term #22
+[0]: I just voted for {2} in term #22
+[1]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[2]: I am now a leader in term #22 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[2]: sending heartbeat to {1} for term #22
+[2]: sending heartbeat to {0} for term #22
+[0]: heartbeat recieved from {2} in term #22
+[1]: heartbeat recieved from {2} in term #22
+[0]: my state is {follower}
+[1]: my state is {follower}
+[0]: just reset my election timer by (Heartbeat)
+[1]: just reset my election timer by (Heartbeat)
+[1]: election timeout
+[1]: just reset my election timer by (StartElection)
+[1]: starting election for term 4 (I have 3 peers)
+[2]: I'm being asked to vote
+[0]: I'm being asked to vote
+[2]: just reset my election timer by (stepDown)
+[0]: just reset my election timer by (stepDown)
+[2]: stepped down to follower, term=4
+[0]: stepped down to follower, term=4
+[2]: I just voted for {1} in term #4
+[0]: I just voted for {1} in term #4
+[2]: just reset my election timer by (RequestVote)
+[0]: just reset my election timer by (RequestVote)
+[1]: I am now a leader in term #4 (won with 2 votes) YAY !!!!!!!!!!!!!!!!
+[1]: sending heartbeat to {2} for term #4
+[1]: sending heartbeat to {0} for term #4
+[2]: heartbeat recieved from {1} in term #4
+[0]: heartbeat recieved from {1} in term #4
+[2]: my state is {follower}
+[0]: my state is {follower}
+[2]: just reset my election timer by (Heartbeat)
+[0]: just reset my election timer by (Heartbeat)
+[0]: im being asked if im a leader (false) in term #4
+[1]: im being asked if im a leader (true) in term #4
+[2]: im being asked if im a leader (false) in term #4

@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"labrpc"
 	"math/rand"
+	"os"
 	"sync"
 	"time"
 )
@@ -47,14 +48,27 @@ const (
 	leader             state = "leader"
 	candidate          state = "candidate"
 	follower           state = "follower"
-	minElectionTimeout       = 800 * time.Millisecond
-	maxElectionTimeout       = 1600 * time.Millisecond
+	minElectionTimeout       = 1000 * time.Millisecond
+	maxElectionTimeout       = 2000 * time.Millisecond
 	heartbeatInterval        = 100 * time.Millisecond
 )
 
 func (rf *Raft) say(format string, a ...interface{}) {
+	// prefix := fmt.Sprintf("[%d]: ", rf.me)
+	// fmt.Printf(prefix+format+"\n", a...)
 	prefix := fmt.Sprintf("[%d]: ", rf.me)
-	fmt.Printf(prefix+format+"\n", a...)
+	line := fmt.Sprintf(prefix+format+"\n", a...)
+
+	// open file for append-only write
+	f, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return // silently ignore logging errors
+	}
+	defer f.Close()
+
+	// append the line
+	f.WriteString(line)
+
 }
 
 func (rf *Raft) resetElectionTimerLocked(by string) {
@@ -89,13 +103,14 @@ func (rf *Raft) stepDownLocked(term int) {
 	rf.resetElectionTimerLocked("stepDown")
 	rf.say("stepped down to follower, term=%d", rf.term)
 }
-func (rf *Raft) becomeCandidateLocked() {
-	rf.votedFor = rf.me
-	rf.voteCount = 1
-	rf.term++
-	rf.state = candidate
-	rf.say("I'm now a candidate in term #%d", rf.term)
-}
+
+//	func (rf *Raft) becomeCandidateLocked() {
+//		rf.votedFor = rf.me
+//		rf.voteCount = 1
+//		rf.term++
+//		rf.state = candidate
+//		rf.say("I'm now a candidate in term #%d", rf.term)
+//	}
 func (rf *Raft) becomeLeaderLocked() {
 	rf.say("I am now a leader in term #%d (won with %d votes) YAY !!!!!!!!!!!!!!!!", rf.term, rf.voteCount)
 	rf.state = leader
@@ -181,6 +196,7 @@ func (rf *Raft) RequestVote(args RequestVoteArgs, reply *RequestVoteReply) {
 			rf.state = follower // reinforce in case I was also candidate
 			reply.Vote = true
 			reply.ElectionTerm = rf.term
+			rf.say("fine... I just voted for {%d} in term #%d", rf.votedFor, rf.term)
 
 		} else {
 			// i couldve voted for myself or for someone else
@@ -276,21 +292,34 @@ type HeartbeatReply struct {
 }
 
 func (rf *Raft) Heartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
+
 	rf.mu.Lock()
+	reply.Term = rf.term
+	reply.Status = false
 
 	rf.say("heartbeat recieved from {%d} in term #%d", args.LeaderID, args.Term)
+	rf.say("my state is {%s}", rf.state)
 	if args.Term < rf.term {
 		rf.say("I'm ignoring an old heartbeat from {%d}", args.LeaderID)
-	} else {
-		rf.resetElectionTimerLocked("Hearbeat")
+		return
+	}
+	if args.Term > rf.term {
+		rf.term = args.Term
+		rf.votedFor = -1
+	}
+	if rf.state != follower {
+		rf.state = follower
+		if rf.heartbeatTicker != nil {
+			rf.heartbeatTicker.Stop()
+			rf.heartbeatTicker = nil
+		}
 	}
 
-	if rf.state == candidate || rf.state == leader {
-		rf.stepDownLocked(args.Term)
-	}
-	// not using this yet?
-	// reply.Term = rf.term
-	// reply.Status =
+	rf.resetElectionTimerLocked("Heartbeat")
+
+	reply.Term = rf.term
+	reply.Status = true
+
 	rf.mu.Unlock()
 }
 
