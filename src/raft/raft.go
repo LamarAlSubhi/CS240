@@ -73,21 +73,14 @@ func (rf *Raft) say(format string, a ...interface{}) {
 
 }
 
-func (rf *Raft) resetElectionTimerLocked(by string) {
-	d := time.Duration(rand.Int63n(int64(maxElectionTimeout-minElectionTimeout))) + minElectionTimeout
-	if rf.electionTimer == nil {
-		rf.electionTimer = time.NewTimer(d)
-		// rf.say("created election timer (%s)", by)
-		return
-	}
-	if !rf.electionTimer.Stop() {
-		select {
-		case <-rf.electionTimer.C:
-		default:
-		}
-	}
-	rf.electionTimer.Reset(d)
-	// rf.say("just reset my election timer by (%s)", by)
+func (rf *Raft) resetElectionTimeoutLocked(by string) {
+	rf.electionTimeout = time.Duration(rand.Int63n(int64(maxElectionTimeout-minElectionTimeout))) + minElectionTimeout
+	rf.say("just reset my election timeout by (%s)", by)
+}
+
+func (rf *Raft) updateLastHeartbeatLocked(by string) {
+	rf.lastHeartbeat = time.Now()
+	rf.say("just reset my heartbeat by (%s)", by)
 }
 
 func (rf *Raft) stepDownLocked(term int) {
@@ -95,34 +88,17 @@ func (rf *Raft) stepDownLocked(term int) {
 	if term > rf.term {
 		rf.term = term
 	}
-	if rf.heartbeatTicker != nil {
-		rf.heartbeatTicker.Stop()
-		rf.heartbeatTicker = nil
-	}
 	rf.votedFor = -1
 	rf.state = follower
 	rf.voteCount = 0
-	rf.resetElectionTimerLocked("stepDown")
+	rf.updateLastHeartbeatLocked("stepDown")
+	rf.resetElectionTimeoutLocked("stepDown")
 	//rf.say("stepped down to follower, term=%d", rf.term)
 }
 
 func (rf *Raft) becomeLeaderLocked() {
 	rf.say("I am now a leader in term #%d (won with %d votes) YAY !!!!!!!!!!!!!!!!", rf.term, rf.voteCount)
 	rf.state = leader
-
-	if rf.electionTimer != nil {
-		if !rf.electionTimer.Stop() {
-			select {
-			case <-rf.electionTimer.C:
-			default:
-			}
-		}
-	}
-
-	if rf.heartbeatTicker != nil {
-		rf.heartbeatTicker.Stop()
-	}
-	rf.heartbeatTicker = time.NewTicker(heartbeatInterval)
 
 	// log stuff
 	n := len(rf.peers)
@@ -187,10 +163,9 @@ type Raft struct {
 	term     int
 	votedFor int //index of person i voted for in this term
 
-	electionTimer *time.Timer // timer that triggers election (follower) or reelection (candidate)
-	voteCount     int         // (candidate only) how many votes recieved in this term
-
-	heartbeatTicker *time.Ticker // (leader only) timer that leader uses to send heartbeats
+	electionTimeout time.Duration // timer that triggers election (follower) or reelection (candidate)
+	lastHeartbeat   time.Time
+	voteCount       int // (candidate only) how many votes recieved in this term
 
 	log         []LogEntry
 	commitIndex int
@@ -258,8 +233,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.Vote = true
 		reply.ElectionTerm = rf.term
 	}
-
-	rf.resetElectionTimerLocked("RequestVote")
 }
 
 func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
@@ -273,6 +246,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 func (rf *Raft) StartElection() {
 
 	rf.mu.Lock()
+	rf.resetElectionTimeoutLocked("StartElection")
 
 	// get info while locked
 	rf.term++
@@ -285,7 +259,7 @@ func (rf *Raft) StartElection() {
 	lastIdx := rf.lastLogIndexLocked()
 	lastTerm := rf.lastLogTermLocked()
 
-	rf.resetElectionTimerLocked("StartElection")
+	rf.updateLastHeartbeatLocked("StartElection")
 	//rf.say("starting election for term %d (I have %d peers)", term, nPeers)
 
 	// quick skip (esp when its just 1 node)
@@ -373,13 +347,9 @@ func (rf *Raft) Heartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 	}
 	if rf.state != follower {
 		rf.state = follower
-		if rf.heartbeatTicker != nil {
-			rf.heartbeatTicker.Stop()
-			rf.heartbeatTicker = nil
-		}
 	}
 
-	rf.resetElectionTimerLocked("Heartbeat")
+	rf.updateLastHeartbeatLocked("Heartbeat")
 
 	reply.Term = rf.term
 	reply.Status = true
@@ -394,6 +364,7 @@ func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatR
 func (rf *Raft) StartHeartbeat() {
 	rf.mu.Lock()
 
+	rf.updateLastHeartbeatLocked("StartHeartbeat")
 	// get info while locked
 	term := rf.term
 	me := rf.me
@@ -433,7 +404,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.state = follower
 	rf.term = 0
 	rf.votedFor = -1
-	rf.electionTimer = nil
+	rf.electionTimeout = 0
 	rf.voteCount = 0
 
 	rf.log = []LogEntry{{Term: 0}} // temp 0
@@ -441,7 +412,8 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.lastApplied = 0
 
 	// randomize
-	rf.resetElectionTimerLocked("Make")
+	rf.resetElectionTimeoutLocked("Make")
+	rf.updateLastHeartbeatLocked("Make")
 
 	rf.applyCh = applyCh
 	go rf.applier()
@@ -459,32 +431,40 @@ func (rf *Raft) life() {
 
 		rf.mu.Lock()
 
-		var electionCh <-chan time.Time
-		var heartbeatCh <-chan time.Time
+		// for some reason timers are so weird to work with
+		// i believe some of my inconsistencies are because of it
+		// so im gonna use timestamps
 
-		// only use election timer when not leader
-		if rf.state != leader && rf.electionTimer != nil {
-			electionCh = rf.electionTimer.C
-		}
+		state := rf.state
+		term := rf.term
+		lastHeartbeat := rf.lastHeartbeat
+		timeout := rf.electionTimeout
 
-		// only use heartbeat ticker when leader
-		if rf.state == leader && rf.heartbeatTicker != nil {
-			heartbeatCh = rf.heartbeatTicker.C
-		}
 		rf.mu.Unlock()
 
-		// no locks while waiting for timeouts
-		select {
+		//no locks
+		if state == follower {
+			rf.say("I'm a follower in term #%d", term)
+			time.Sleep(100 * time.Millisecond)
+			if time.Since(lastHeartbeat) > timeout {
+				rf.StartElection()
+			}
+			time.Sleep(100 * time.Millisecond)
 
-		case <-electionCh: // timeout
-			//rf.say("election timeout")
+		} else if state == candidate {
+			rf.say("I'm a candidate in term #%d", term)
+			if time.Since(lastHeartbeat) > timeout {
+				rf.say("gonna try re election")
+				rf.StartElection()
+			}
+			time.Sleep(100 * time.Millisecond)
 
-			rf.StartElection()
-
-		case <-heartbeatCh: //timeout
-			//rf.say("need to resend hearbeats (heartbeat timeout)")
+		} else if state == leader {
+			rf.say("I'm a LEADER in term #%d", term)
 			rf.StartHeartbeat()
+			time.Sleep(500 * time.Millisecond)
 		}
+
 	}
 
 }
@@ -529,7 +509,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	} else if rf.state != follower {
 		rf.state = follower
 	}
-	rf.resetElectionTimerLocked("AppendEntries")
+	rf.updateLastHeartbeatLocked("AppendEntries")
 
 	// consistency check
 	if args.PrevLogIndex > rf.lastLogIndexLocked() {
