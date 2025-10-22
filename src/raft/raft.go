@@ -18,6 +18,8 @@ package raft
 //
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"labrpc"
 	"math/rand"
@@ -25,9 +27,6 @@ import (
 	"sync"
 	"time"
 )
-
-// import "bytes"
-// import "encoding/gob"
 
 type ApplyMsg struct {
 	Index       int
@@ -75,12 +74,12 @@ func (rf *Raft) say(format string, a ...interface{}) {
 
 func (rf *Raft) resetElectionTimeoutLocked(by string) {
 	rf.electionTimeout = time.Duration(rand.Int63n(int64(maxElectionTimeout-minElectionTimeout))) + minElectionTimeout
-	rf.say("just reset my election timeout by (%s)", by)
+	// rf.say("just reset my election timeout by (%s)", by)
 }
 
 func (rf *Raft) updateLastHeartbeatLocked(by string) {
 	rf.lastHeartbeat = time.Now()
-	rf.say("just reset my heartbeat by (%s)", by)
+	// rf.say("just reset my heartbeat by (%s)", by)
 }
 
 func (rf *Raft) stepDownLocked(term int) {
@@ -91,14 +90,17 @@ func (rf *Raft) stepDownLocked(term int) {
 	rf.votedFor = -1
 	rf.state = follower
 	rf.voteCount = 0
+	rf.persist()
 	rf.updateLastHeartbeatLocked("stepDown")
 	rf.resetElectionTimeoutLocked("stepDown")
+
 	//rf.say("stepped down to follower, term=%d", rf.term)
 }
 
 func (rf *Raft) becomeLeaderLocked() {
 	rf.say("I am now a leader in term #%d (won with %d votes) YAY !!!!!!!!!!!!!!!!", rf.term, rf.voteCount)
 	rf.state = leader
+	rf.persist()
 
 	// log stuff
 	n := len(rf.peers)
@@ -232,6 +234,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.votedFor = args.CandidateID
 		reply.Vote = true
 		reply.ElectionTerm = rf.term
+		rf.persist()
 	}
 }
 
@@ -258,6 +261,7 @@ func (rf *Raft) StartElection() {
 	nPeers := len(rf.peers)
 	lastIdx := rf.lastLogIndexLocked()
 	lastTerm := rf.lastLogTermLocked()
+	rf.persist()
 
 	rf.updateLastHeartbeatLocked("StartElection")
 	//rf.say("starting election for term %d (I have %d peers)", term, nPeers)
@@ -350,6 +354,7 @@ func (rf *Raft) Heartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 	}
 
 	rf.updateLastHeartbeatLocked("Heartbeat")
+	rf.persist()
 
 	reply.Term = rf.term
 	reply.Status = true
@@ -443,7 +448,9 @@ func (rf *Raft) life() {
 		rf.mu.Unlock()
 
 		//no locks
-		if state == follower {
+
+		switch state {
+		case follower:
 			rf.say("I'm a follower in term #%d", term)
 			time.Sleep(100 * time.Millisecond)
 			if time.Since(lastHeartbeat) > timeout {
@@ -451,7 +458,7 @@ func (rf *Raft) life() {
 			}
 			time.Sleep(100 * time.Millisecond)
 
-		} else if state == candidate {
+		case candidate:
 			rf.say("I'm a candidate in term #%d", term)
 			if time.Since(lastHeartbeat) > timeout {
 				rf.say("gonna try re election")
@@ -459,12 +466,12 @@ func (rf *Raft) life() {
 			}
 			time.Sleep(100 * time.Millisecond)
 
-		} else if state == leader {
+		case leader:
 			rf.say("I'm a LEADER in term #%d", term)
 			rf.StartHeartbeat()
 			time.Sleep(500 * time.Millisecond)
-		}
 
+		}
 	}
 
 }
@@ -536,6 +543,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.syncLocked(args.PrevLogIndex+1, args.Entries)
 	reply.Success = true
 	reply.Term = rf.term
+	rf.persist()
 
 	// commitIndex update
 	if args.LeaderCommit > rf.commitIndex {
@@ -675,11 +683,12 @@ func (rf *Raft) replicateTo(peer int, leaderTerm int) {
 }
 
 func (rf *Raft) tryAdvanceCommitLocked() {
+	old := rf.commitIndex
 	for N := rf.lastLogIndexLocked(); N > rf.commitIndex; N-- {
 		if rf.log[N].Term != rf.term {
 			continue
-		}
-		count := 1 // including leader
+		} // from paper
+		count := 1
 		for i := range rf.peers {
 			if i != rf.me && rf.matchIndex[i] >= N {
 				count++
@@ -690,21 +699,47 @@ func (rf *Raft) tryAdvanceCommitLocked() {
 			break
 		}
 	}
+	if rf.commitIndex > old {
+		// push LeaderCommit now
+		termAtStart := rf.term
+		me := rf.me
+		n := len(rf.peers)
+		rf.mu.Unlock()
+		for p := 0; p < n; p++ {
+			if p == me {
+				continue
+			}
+			go rf.replicateTo(p, termAtStart)
+		}
+		rf.mu.Lock()
+	}
 }
 func (rf *Raft) applier() {
 	for {
 		rf.mu.Lock()
-		for rf.lastApplied < rf.commitIndex {
-			rf.lastApplied++
+		for {
+			// only apply if there is a committed entry + the next index exists
+			if rf.lastApplied >= rf.commitIndex {
+				break
+			}
+			next := rf.lastApplied + 1
+			if next >= len(rf.log) { // commit advanced ahead of our local log tail bc of reordering
+				// just wait
+				break
+			}
+
+			// apply one entry
+			rf.lastApplied = next
 			idx := rf.lastApplied
 			cmd := rf.log[idx].Command
 			msg := ApplyMsg{Index: idx, Command: cmd}
+
 			rf.mu.Unlock()
 			rf.applyCh <- msg
 			rf.mu.Lock()
 		}
 		rf.mu.Unlock()
-		time.Sleep(2 * time.Millisecond) // be careful of the sleep pls
+		time.Sleep(2 * time.Millisecond)
 	}
 }
 
@@ -722,6 +757,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.log = append(rf.log, entry)
 	index := len(rf.log) - 1
 	term := rf.term
+	rf.persist()
 
 	// leader's replication state
 	rf.matchIndex[rf.me] = index
@@ -753,21 +789,49 @@ func (rf *Raft) Kill() {
 
 func (rf *Raft) persist() {
 	// Your code here.
-	// Example:
-	// w := new(bytes.Buffer)
-	// e := gob.NewEncoder(w)
-	// e.Encode(rf.xxx)
-	// e.Encode(rf.yyy)
-	// data := w.Bytes()
-	// rf.persister.SaveRaftState(data)
+	w := new(bytes.Buffer)
+	e := gob.NewEncoder(w)
+
+	// encode the fields that must survive crashes
+	e.Encode(rf.term)
+	e.Encode(rf.votedFor)
+	e.Encode(rf.log)
+
+	data := w.Bytes()
+	rf.persister.SaveRaftState(data)
 }
 
 // restore previously persisted state.
 func (rf *Raft) readPersist(data []byte) {
 	// Your code here.
-	// Example:
-	// r := bytes.NewBuffer(data)
-	// d := gob.NewDecoder(r)
-	// d.Decode(&rf.xxx)
-	// d.Decode(&rf.yyy)
+	if data == nil || len(data) == 0 {
+		return
+	}
+
+	r := bytes.NewBuffer(data)
+	d := gob.NewDecoder(r)
+
+	var term int
+	var votedFor int
+	var log []LogEntry
+
+	// decode in the same order used in persist()
+	if d.Decode(&term) != nil ||
+		d.Decode(&votedFor) != nil ||
+		d.Decode(&log) != nil {
+		// corrupted or incomplete data
+		// just ignore and return
+		return
+	}
+
+	// go back to recovered state
+	rf.term = term
+	rf.votedFor = votedFor
+	if len(log) == 0 {
+		// keep the dummy entry at index 0
+		rf.log = []LogEntry{{Term: 0}}
+	} else {
+		rf.log = log
+	}
+	// note that commitIndex and lastApplied dont presist
 }
