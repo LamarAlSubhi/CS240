@@ -1,0 +1,117 @@
+package gossip
+
+import (
+	"encoding/json"
+	"os"
+	"sync"
+	"time"
+)
+
+// Store keeps track of all rumors a node has seen
+// and logs events to a JSONL file for analysis.
+type Store struct {
+	mu     sync.Mutex
+	seen   map[string]Rumor // rumor ID -> Rumor
+	newIDs []string         // rumors to push in next tick
+	logf   *os.File
+}
+
+// NewStore initializes the store and opens the log file.
+func NewStore(path string) *Store {
+	f, _ := os.Create(path)
+	return &Store{
+		seen: map[string]Rumor{},
+		logf: f,
+	}
+}
+
+// Close closes the log file (called on shutdown).
+func (s *Store) Close() error {
+	if s.logf != nil {
+		return s.logf.Close()
+	}
+	return nil
+}
+
+// Add inserts a rumor if unseen.
+// Returns true if it's new (not duplicate).
+func (s *Store) Add(r Rumor) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if _, ok := s.seen[r.ID]; ok {
+		return false
+	}
+	s.seen[r.ID] = r
+	s.newIDs = append(s.newIDs, r.ID)
+	s.writeLog("deliver", r.ID, len(r.Body))
+	return true
+}
+
+// ReadyToPush returns rumors recently added (un-gossiped yet)
+// and clears the list. Called by the gossip loop each tick.
+func (s *Store) ReadyToPush() []Rumor {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if len(s.newIDs) == 0 {
+		return nil
+	}
+	out := make([]Rumor, 0, len(s.newIDs))
+	for _, id := range s.newIDs {
+		out = append(out, s.seen[id])
+	}
+	s.newIDs = s.newIDs[:0]
+	return out
+}
+
+// Digest returns all rumor IDs known by this node.
+// Used for anti-entropy and metrics.
+func (s *Store) Digest() []string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	ids := make([]string, 0, len(s.seen))
+	for id := range s.seen {
+		ids = append(ids, id)
+	}
+	return ids
+}
+
+// DigestCount returns how many rumors this node knows.
+func (s *Store) DigestCount() int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return len(s.seen)
+}
+
+// writeLog appends a JSONL record of an event to the log file.
+func (s *Store) writeLog(ev string, id string, sz int) {
+	type LogRec struct {
+		TS int64  `json:"ts"`
+		Ev string `json:"ev"`
+		ID string `json:"id"`
+		Sz int    `json:"sz"`
+	}
+	rec := LogRec{
+		TS: time.Now().UnixNano(),
+		Ev: ev,
+		ID: id,
+		Sz: sz,
+	}
+	b, _ := json.Marshal(rec)
+	_, _ = s.logf.Write(append(b, '\n'))
+}
+
+// LookupMany returns the Rumor objects for the given IDs (skips unknown IDs).
+func (s *Store) LookupMany(ids []string) []Rumor {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	out := make([]Rumor, 0, len(ids))
+	for _, id := range ids {
+		if r, ok := s.seen[id]; ok {
+			out = append(out, r)
+		}
+	}
+	return out
+}
