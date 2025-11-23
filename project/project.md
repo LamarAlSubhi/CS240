@@ -17,7 +17,7 @@ Prof suggested changes:
 8. Report & slides
 
 
-## HOW TO RUN (hassan pls look):
+## HOW TO RUN (hassan pls look DONE ✅):
 
 ### TERMINAL 1:
 - cd CS240/project/gossip
