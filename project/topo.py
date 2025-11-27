@@ -4,6 +4,8 @@ from mininet.topo import Topo
 from mininet.link import TCLink
 from mininet.node import OVSBridge
 from mininet.cli import CLI
+import os
+import sys
 
 
 class GossipTopo(Topo):
@@ -18,10 +20,22 @@ class GossipTopo(Topo):
         self.addLink(h2, s1, cls=TCLink, bw=10, delay="10ms", loss=0)
         self.addLink(h3, s1, cls=TCLink, bw=10, delay="10ms", loss=0)
 
+def get_gossip_bin():
+    """
+    Resolve bin/linux/gossipd relative to this topo.py file,
+    so it works on all machines with the same repo layout.
+    """
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    gossip_bin = os.path.join(script_dir, "bin", "linux", "gossipd")
+
+    if not (os.path.isfile(gossip_bin) and os.access(gossip_bin, os.X_OK)):
+        print(f"ERROR: gossipd not found or not executable at: {gossip_bin}", file=sys.stderr)
+        sys.exit(1)
+
+    return gossip_bin
 
 def start_gossipd(net):
-    gossip_bin = "/home/hassan/cs240/project/CS240/project/bin/linux/gossipd"
-
+    gossip_bin = get_gossip_bin()
     hosts = [net.get(h) for h in ("h1", "h2", "h3")]
     ips = [h.IP() for h in hosts]
 
