@@ -16,18 +16,6 @@ Prof suggested changes:
 7. Analysis & plots
 8. Report & slides
 
-
-## HOW TO RUN
-
-### STEP1: build the linux binary:
-- cd project/gossip
-- GOOS=linux GOARCH=amd64 go build -o ../bin/linux/gossipd ./cmd/gossipd
-
-### STEP2: run Docker:
-
-### STEP3: run Mininet inside Docker:
-
-
 ## General Commands Inside Mininet
 - verify node: mininet> h1 ps
 - inject rumor: mininet> h1 curl "http://10.0.0.1:9080/inject?id=r42&body=hello&ttl=8"
@@ -35,8 +23,11 @@ Prof suggested changes:
 - metric endpoint: mininet> h2 curl http://10.0.0.2:9080/metrics
 - exit: mininet> exit
 
+## Dependencies
 
-## Docker Dependencies
-
+Ubuntu 22.04+ includes Mininet in its official repositories.
+Do NOT use Docker images or the Mininet GitHub install script (it fails on Python 3.12 / PEP 668).
+- sudo apt update
+- sudo apt install -y mininet python3 python3-pip python3-venv git
 
 
