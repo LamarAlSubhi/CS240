@@ -7,10 +7,10 @@ Prof suggested changes:
 
 ## Workflow? / plan? / something?
 
-1. Message format + basic push on reliable links
-2. Push-pull + TTL
-3. Anti-entropy reconciliation
-4. Mininet bring-up
+1. Message format + basic push on reliable links(DONE)
+2. Push-pull + TTL (DONE)
+3. Anti-entropy reconciliation (DONE)
+4. Mininet bring-up (DONE)
 5. Baseline experiments (convergence vs N, f) in Mininet
 6. Loss, jitter, bandwidth limits, and churn
 7. Analysis & plots
