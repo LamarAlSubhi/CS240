@@ -17,17 +17,26 @@ Prof suggested changes:
 8. Report & slides
 
 
-## HOW TO RUN (hassan pls look DONE ✅):
+## HOW TO RUN
 
-### TERMINAL 1:
-- cd CS240/project/gossip
-- go build -o gossipd ./cmd/gossipd
+### STEP1: build the linux binary:
+- cd project/gossip
+- GOOS=linux GOARCH=amd64 go build -o ../bin/linux/gossipd ./cmd/gossipd
 
-### TERMINAL 2:
-- ./gossipd --id=1 --bind=:9001 --seeds=127.0.0.1:9002 --metrics-addr=:9081 --log=/tmp/g1.jsonl
+### STEP2: run Docker:
 
-### TERMINAL 3:
-- ./gossipd --id=2 --bind=:9002 --seeds=127.0.0.1:9001 --metrics-addr=:9082 --log=/tmp/g2.jsonl
+### STEP3: run Mininet inside Docker:
 
-### TERMINAL 1 (again):
-- curl "http://localhost:9081/inject?id=r3&body=kaust&ttl=6"
+
+## General Commands Inside Mininet
+- verify node: mininet> h1 ps
+- inject rumor: mininet> h1 curl "http://10.0.0.1:9080/inject?id=r42&body=hello&ttl=8"
+- view log: mininet> h1 tail -f /tmp/gossip-1.jsonl
+- metric endpoint: mininet> h2 curl http://10.0.0.2:9080/metrics
+- exit: mininet> exit
+
+
+## Docker Dependencies
+
+
+
