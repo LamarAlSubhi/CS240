@@ -6,6 +6,7 @@
 import argparse
 import os
 import sys
+import time
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.link import TCLink
@@ -127,6 +128,30 @@ def parse_args():
     parser.add_argument("--logdir", default="/tmp",
                         help="Directory for event logs and stdout.")
 
+    # headless/automation options
+    parser.add_argument(
+        "--no-cli",
+        action="store_true",
+        help="Run without Mininet CLI (for automated experiments)."
+    )
+    parser.add_argument(
+        "--inject-rumor",
+        default=None,
+        help="If set, automatically inject this rumor id from h1."
+    )
+    parser.add_argument(
+        "--inject-ttl",
+        type=int,
+        default=8,
+        help="TTL to use when auto-injecting a rumor."
+    )
+    parser.add_argument(
+        "--runtime",
+        type=float,
+        default=2.0,
+        help="Seconds to keep the network running after injection."
+    )
+
     return parser.parse_args()
 
 
@@ -142,7 +167,7 @@ def main():
         print(f"ERROR: gossipd not executable at: {args.bin}", file=sys.stderr)
         sys.exit(1)
 
-    # Build topology the correct Mininet way
+    # Build topology the Mininet way (params passed into build())
     topo = GossipTopo(
         n_hosts=args.hosts,
         bw=args.bw,
@@ -154,7 +179,7 @@ def main():
         topo=topo,
         link=TCLink,
         controller=None,
-        autoSetMacs=True
+        autoSetMacs=True,
     )
     net.start()
 
@@ -166,11 +191,33 @@ def main():
         ttl=args.ttl,
         period=args.period,
         metrics_port=args.metrics_port,
-        log_dir=args.logdir
+        log_dir=args.logdir,
     )
 
+    # Headless / automated mode
+    if args.no_cli:
+        if args.inject_rumor:
+            h1 = net.hosts[0]
+            curl_cmd = (
+                f'curl "http://127.0.0.1:{args.metrics_port}/inject'
+                f'?id={args.inject_rumor}&ttl={args.inject_ttl}"'
+            )
+            print(f"[INFO] Auto-injecting rumor {args.inject_rumor!r} from {h1.name}")
+            out = h1.cmd(curl_cmd)
+            print(f"[INFO] Inject output: {out.strip()}")
+
+        # Let the protocol run for a bit
+        if args.runtime > 0:
+            print(f"[INFO] Sleeping for {args.runtime} seconds to let gossip run")
+            time.sleep(args.runtime)
+
+        net.stop()
+        return
+
+    # Interactive mode (what you already used)
     CLI(net)
     net.stop()
+
 
 
 

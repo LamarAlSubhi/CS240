@@ -185,7 +185,7 @@ def main() -> None:
     args = parse_args()
 
     print(f"[INFO] Analyzing logs: {args.log_glob}")
-    print(f"[INFO] Rumor id: {args.rumor-id if False else args.rumor_id}")
+    print(f"[INFO] Rumor id: {args.rumor_id}")
 
     events = load_events(args.log_glob)
     if not events:
