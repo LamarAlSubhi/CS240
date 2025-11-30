@@ -11,9 +11,9 @@ Prof suggested changes:
 2. Push-pull + TTL (DONE)
 3. Anti-entropy reconciliation (DONE)
 4. Mininet bring-up (DONE)
-5. Baseline experiments (convergence vs N, f) in Mininet
-6. Loss, jitter, bandwidth limits, and churn
-7. Analysis & plots
+5. Baseline experiments (convergence vs N, f) in Mininet (Done)
+6. Loss, jitter, bandwidth limits, and churn (33.6% Done)
+7. Analysis & plots (13.4% Done)
 8. Report & slides
 
 ## General Commands Inside Mininet
