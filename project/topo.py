@@ -90,7 +90,9 @@ def start_gossipd(net, gossip_bin, fanout, ttl, period, metrics_port, log_dir):
             f"> {out_path} 2>&1 &"
         )
 
-        print(f"[INFO] Launching gossipd on {host.name}: {cmd}")
+        print(f"[INFO] Launching gossipd on {host.name}")
+        host.cmd(cmd + " >/dev/null 2>&1 &")
+
         host.cmd(cmd)
 
 
@@ -193,6 +195,7 @@ def main():
         metrics_port=args.metrics_port,
         log_dir=args.logdir,
     )
+    time.sleep(1.5)
 
     # Headless / automated mode
     if args.no_cli:
