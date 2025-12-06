@@ -25,7 +25,8 @@ func (n *Node) ServeHTTP() error {
 		if ttl <= 0 {
 			ttl = n.cfg.TTL
 		}
-		n.store.Add(Rumor{ID: id, TTL: ttl, Body: body})
+		// using the helper, we log "inject" + origin + inject_ts
+		n.Inject(id, body, ttl)
 		_, _ = w.Write([]byte("ok\n"))
 	})
 

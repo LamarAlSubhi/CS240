@@ -26,10 +26,33 @@ func NewNode(cfg Config, tx Transport) *Node {
 	return &Node{
 		cfg:   cfg,
 		tx:    tx,
-		store: NewStore(cfg.LogPath),
+		store: NewStore(cfg.LogPath, cfg.ID), // pass node ID here
 		peers: append([]string{}, cfg.Seeds...),
 		stop:  make(chan struct{}),
 	}
+}
+
+// Inject creates a new rumor at this node, logs the injection,
+// and inserts it into the local store.
+func (n *Node) Inject(id string, body []byte, ttl int) {
+	if ttl <= 0 {
+		ttl = n.cfg.TTL
+	}
+
+	now := time.Now().UnixNano()
+	r := Rumor{
+		ID:       id,
+		TTL:      ttl,
+		Body:     body,
+		Origin:   n.cfg.ID,
+		InjectTS: now,
+	}
+
+	// 1) log injection at origin
+	n.store.writeLog("inject", r)
+
+	// 2) store it (this will also log "deliver")
+	n.store.Add(r)
 }
 
 // Start launches the node’s gossip loops.
@@ -80,7 +103,15 @@ func (n *Node) tickOnce() {
 		log.Printf("    rumor id=%s ttl=%d body=%q\n", r.ID, r.TTL, string(r.Body))
 	}
 
+	// one "send" event per outgoing message
+	var dummy Rumor
+	if len(rs) > 0 {
+		dummy = Rumor{ID: rs[0].ID} // just tag the batch with some id
+	}
+
 	for _, p := range peers {
+		n.store.writeLog("send", dummy)
+
 		if err := n.tx.Send(p, msg); err != nil {
 			log.Printf("send to %s: %v", p, err)
 		}
@@ -113,6 +144,13 @@ func (n *Node) Handle(m Msg, remote string) {
 	for _, r := range m.Rumors {
 		log.Printf("    rumor id=%s ttl=%d body=%q\n", r.ID, r.TTL, string(r.Body))
 	}
+	// log one "recv" event per incoming message
+	var dummy Rumor
+	if len(m.Rumors) > 0 {
+		dummy = m.Rumors[0]
+	}
+	n.store.writeLog("recv", dummy)
+
 
 	switch m.Type {
 	case MsgPush:

@@ -14,8 +14,11 @@ type Rumor struct {
 	ID   string `json:"id"`
 	TTL  int    `json:"ttl"`
 	Body []byte `json:"body,omitempty"`
-}
 
+	// filled only at the origin node
+	Origin   string `json:"origin,omitempty"`    // node that first injected it
+	InjectTS int64  `json:"inject_ts,omitempty"` // time of injection (Unix nanos)
+}
 // Msg is the top-level message exchanged between nodes.
 type Msg struct {
 	Type   MsgType  `json:"type"`
