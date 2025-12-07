@@ -31,23 +31,58 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-DEFAULT_EXPERIMENTS = [
-    {"name": "period_50ms",  "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "50ms"},
-    {"name": "period_200ms", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "200ms"},
-    {"name": "period_500ms", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "500ms"},
-    
-    {"name": "TTL1", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 1},
-    {"name": "TTL2", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 2},
-    {"name": "TTL4", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 4},
-    {"name": "TTL8", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 8},
+# =====================
+# Experiment presets
+# =====================
 
+SCALING_EXPERIMENTS = [
+    # Convergence vs number of hosts (N), loss = 0, delay = 10ms, fanout = 2
+    {"name": "n5",  "hosts": 5,  "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "n10", "hosts": 10, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "n20", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "n30", "hosts": 30, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "n40", "hosts": 40, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "n50", "hosts": 50, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
 ]
 
+FANOUT_EXPERIMENTS = [
+    # Convergence vs fanout, N=20, loss = 0, delay = 10ms
+    {"name": "f1",   "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 1, "ttl": 12},
+    {"name": "f2",   "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "f3",   "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 3, "ttl": 12},
+    {"name": "f4",   "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 4, "ttl": 12},
+    {"name": "flog", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 4, "ttl": 12},  # ≈ log2(20)
+]
 
+LOSS_EXPERIMENTS = [
+    # Convergence vs loss, N=10, delay = 20ms, fanout=3
+    {"name": "loss0",  "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0,  "fanout": 3, "ttl": 12},
+    {"name": "loss10", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 10, "fanout": 3, "ttl": 12},
+    {"name": "loss20", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 20, "fanout": 3, "ttl": 12},
+    {"name": "loss30", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 30, "fanout": 3, "ttl": 12},
+    {"name": "loss50", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 50, "fanout": 3, "ttl": 12},
+]
 
+DELAY_EXPERIMENTS = [
+    # Convergence vs delay, N=10, loss = 0, fanout = 2
+    {"name": "d5",  "hosts": 10, "bw": 10, "delay": "5ms",  "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "d10", "hosts": 10, "bw": 10, "delay": "10ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "d20", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "d40", "hosts": 10, "bw": 10, "delay": "40ms", "loss": 0, "fanout": 2, "ttl": 12},
+    {"name": "d80", "hosts": 10, "bw": 10, "delay": "80ms", "loss": 0, "fanout": 2, "ttl": 12},
+]
+
+# Fallback default (used if suite-name is not recognized)
+DEFAULT_EXPERIMENTS = SCALING_EXPERIMENTS
+
+SUITES = {
+    "scaling_N": SCALING_EXPERIMENTS,
+    "fanout_sweep": FANOUT_EXPERIMENTS,
+    "loss_sweep": LOSS_EXPERIMENTS,
+    "delay_sweep": DELAY_EXPERIMENTS,
+}
 
 GOSSIP_LOG_GLOB = "/tmp/gossip-*.jsonl"
-
 
 # -----------------------
 # CLI
@@ -83,6 +118,12 @@ def parse_args():
                    help="Delay for custom experiment (e.g. 10ms, 50ms).")
     p.add_argument("--loss", type=float, default=0.0,
                    help="Loss percentage for custom experiment.")
+    p.add_argument("--fanout", type=int, default=2,
+                   help="Fanout for custom experiment.")
+    p.add_argument("--ttl", type=int, default=8,
+                   help="TTL for custom experiment.")
+    p.add_argument("--period", default="200ms",
+                   help="Period for custom experiment (e.g. 50ms, 200ms).")
 
     return p.parse_args()
 
@@ -149,18 +190,29 @@ def parse_analyzer_output(stdout: str):
 
 def make_suite_dir(project_dir: Path, suite_name_arg: str | None) -> Path:
     """
-    Decide suite name and create a unique directory under experiments/.
-    If suite_name_arg is None, generate a timestamp name.
-    If name exists, append _2, _3, etc.
+    Decide suite name and create/reuse a directory under experiments/.
+
+    If suite_name_arg is given:
+        - Always use experiments/<suite_name_arg>, creating it if needed.
+        - Do NOT append _2, _3, etc.
+    If suite_name_arg is None:
+        - Generate a timestamp-based name and, if needed, append _2, _3, etc.
     """
     experiments_root = project_dir / "experiments"
     experiments_root.mkdir(exist_ok=True)
 
+    # Case 1: user explicitly provided a suite name → reuse it
     if suite_name_arg:
-        base = suite_name_arg
-    else:
-        base = "suite_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+        suite_dir = experiments_root / suite_name_arg
+        if not suite_dir.exists():
+            suite_dir.mkdir()
+            print(f"[INFO] Suite directory: {suite_dir}")
+        else:
+            print(f"[INFO] Using existing suite directory: {suite_dir}")
+        return suite_dir
 
+    # Case 2: auto-generated suite name (old behavior)
+    base = "suite_" + datetime.now().strftime("%Y%m%d_%H%M%S")
     suite_dir = experiments_root / base
     if not suite_dir.exists():
         suite_dir.mkdir()
@@ -256,7 +308,7 @@ def run_experiment(exp, project_dir: Path, bin_path: str, suite_dir: Path):
         "--no-cli",
         "--inject-rumor", rumor_id,
         "--inject-ttl", "8",
-        "--runtime", "2.0",
+        "--runtime", "4.0", # might need to adjust
     ]
     run_cmd(topo_cmd, cwd=project_dir)
 
@@ -303,8 +355,8 @@ def main():
 
     suite_dir = make_suite_dir(project_dir, args.suite_name)
     results_csv_path = suite_dir / "results.csv"
-
-    if args.exp_name:
+     if args.exp_name:
+        # single custom experiment
         experiments = [{
             "name": args.exp_name,
             "hosts": args.hosts,
@@ -313,7 +365,15 @@ def main():
             "loss": args.loss,
         }]
     else:
-        experiments = DEFAULT_EXPERIMENTS
+        # choose a preset suite if known; otherwise fallback to DEFAULT_EXPERIMENTS
+        if args.suite_name and args.suite_name in SUITES:
+            experiments = SUITES[args.suite_name]
+            print(f"[INFO] Using preset suite '{args.suite_name}' "
+                  f"with {len(experiments)} experiments.")
+        else:
+            experiments = DEFAULT_EXPERIMENTS
+            print(f"[INFO] Using DEFAULT_EXPERIMENTS "
+                  f"({len(experiments)} experiments).")
 
     all_results = []
 

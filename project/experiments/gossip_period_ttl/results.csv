@@ -1,8 +1,0 @@
-name,hosts,bw,delay,loss,success,nodes_delivered,convergence_sec
-period_50ms,10,10,20ms,0,0,,
-period_200ms,10,10,20ms,0,0,9,0.722012
-period_500ms,10,10,20ms,0,0,,
-TTL1,10,10,20ms,0,0,4,0.725419
-TTL2,10,10,20ms,0,0,,
-TTL4,10,10,20ms,0,0,2,0.32436
-TTL8,10,10,20ms,0,0,6,1.134204

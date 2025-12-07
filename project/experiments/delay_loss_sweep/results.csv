@@ -1,6 +1,0 @@
-name,hosts,bw,delay,loss,success,nodes_delivered,convergence_sec
-d_0ms_loss0,3,10,0ms,0,1,3,0.201183
-d_20ms_loss0,3,10,20ms,0,1,3,0.334293
-d_80ms_loss0,3,10,80ms,0,1,3,0.711503
-d_20ms_loss2,3,10,20ms,2,1,3,0.326921
-d_20ms_loss5,3,10,20ms,5,1,3,0.327246

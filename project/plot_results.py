@@ -11,6 +11,7 @@ import argparse
 import csv
 import os
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
 
@@ -173,6 +174,98 @@ def plot_vs_loss(suite_dir: Path, rows):
     plt.close()
     print(f"[INFO] Saved convergence-vs-loss plot to {out_path}")
 
+def plot_vs_hosts(suite_dir: Path, rows):
+    """
+    Line plot: convergence vs number of hosts (N), for zero-loss runs
+    at ~fixed delay (e.g., 20ms).
+    """
+    pts = []
+    for r in rows:
+        if r["convergence_sec"] is None:
+            continue
+        if r.get("loss_pct") not in (0.0, 0):
+            continue
+        # lock to 20ms; relax this if needed
+        if r.get("delay_ms") not in (20.0,):
+            continue
+        try:
+            n = int(r["hosts"])
+        except (ValueError, TypeError):
+            continue
+        pts.append((n, r["convergence_sec"]))
+
+    if len(pts) < 2:
+        print("[INFO] Not enough points to plot convergence vs hosts.")
+        return
+
+    by_n = {}
+    for n, conv in pts:
+        by_n.setdefault(n, []).append(conv)
+
+    ns = sorted(by_n.keys())
+    conv_avg = [sum(by_n[n]) / len(by_n[n]) for n in ns]
+
+    plt.figure()
+    plt.plot(ns, conv_avg, marker="o")
+    plt.xlabel("Number of hosts (N)")
+    plt.ylabel("Convergence time (sec)")
+    plt.title(f"Convergence vs hosts (loss = 0, delay = 20 ms) - {suite_dir.name}")
+    plt.grid(True)
+    plt.tight_layout()
+
+    out_path = suite_dir / "convergence_vs_hosts.png"
+    plt.savefig(out_path)
+    plt.close()
+    print(f"[INFO] Saved convergence-vs-hosts plot to {out_path}")
+
+def plot_vs_fanout(suite_dir: Path, rows):
+    """
+    Line plot: convergence vs fanout, for fixed N and delay, zero loss.
+    """
+    pts = []
+    for r in rows:
+        if r["convergence_sec"] is None:
+            continue
+        if r.get("loss_pct") not in (0.0, 0):
+            continue
+        # lock to N=20 and delay=20ms for clarity; adjust if different
+        try:
+            n = int(r["hosts"])
+        except (ValueError, TypeError):
+            continue
+        if n != 20:
+            continue
+        if r.get("delay_ms") != 20.0:
+            continue
+
+        # fanout is only in the name, e.g., "f2"
+        name = r["name"]
+        m = re.search(r"f(\d+)", name)
+        if not m:
+            continue
+        f = int(m.group(1))
+        pts.append((f, r["convergence_sec"]))
+
+    if len(pts) < 2:
+        print("[INFO] Not enough points to plot convergence vs fanout.")
+        return
+
+    pts.sort()
+    fanouts = [f for f, _ in pts]
+    conv = [c for _, c in pts]
+
+    plt.figure()
+    plt.plot(fanouts, conv, marker="o")
+    plt.xlabel("Fanout (f)")
+    plt.ylabel("Convergence time (sec)")
+    plt.title(f"Convergence vs fanout (N=20, loss=0, delay=20 ms) - {suite_dir.name}")
+    plt.grid(True)
+    plt.tight_layout()
+
+    out_path = suite_dir / "convergence_vs_fanout.png"
+    plt.savefig(out_path)
+    plt.close()
+    print(f"[INFO] Saved convergence-vs-fanout plot to {out_path}")
 
 def main():
     args = parse_args()
@@ -185,6 +278,8 @@ def main():
     plot_summary(suite_dir, rows)
     plot_vs_delay(suite_dir, rows)
     plot_vs_loss(suite_dir, rows)
+    plot_vs_hosts(suite_dir, rows)
+    plot_vs_fanout(suite_dir, rows)
 
     print(f"[INFO] Plotting complete for suite: {suite_dir.name}")
 

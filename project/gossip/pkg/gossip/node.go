@@ -179,7 +179,7 @@ func (n *Node) Handle(m Msg, remote string) {
 
 func (n *Node) antiEntropyLoop() {
 	defer n.wg.Done()
-	n.aeTick = time.NewTicker(5 * time.Second) // fixed 5s for now
+	n.aeTick = time.NewTicker(1 * time.Second) // might need to tweak
 	defer n.aeTick.Stop()
 
 	for {

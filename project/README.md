@@ -151,3 +151,15 @@ During gossip:
 If loss is high:
 - Count number of rumors missing before repair
 - Plot repair time to correctness
+
+
+#### HASSAN (try these):
+sudo python3 run_experiments.py --suite-name scaling_N
+sudo python3 run_experiments.py --suite-name fanout_sweep
+sudo python3 run_experiments.py --suite-name loss_sweep
+sudo python3 run_experiments.py --suite-name delay_sweep
+
+python3 plot_results.py --suite-name scaling_N
+python3 plot_results.py --suite-name fanout_sweep
+python3 plot_results.py --suite-name loss_sweep
+python3 plot_results.py --suite-name delay_sweep
