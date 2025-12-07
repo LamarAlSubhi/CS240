@@ -1,331 +1,256 @@
 #!/usr/bin/env python3
-"""
-Run a batch of gossip experiments over Mininet and save logs + results.
-
-This script does NOT plot. Plotting is handled by plot_results.py.
-
-Usage (default experiments):
-  cd CS240/project
-  sudo python3 run_experiments.py
-
-Give the whole suite a name:
-  sudo python3 run_experiments.py --suite-name nov29_run
-
-Run a single custom experiment instead of defaults:
-  sudo python3 run_experiments.py \
-    --suite-name highloss_test \
-    --exp-name highloss_5hosts \
-    --hosts 5 \
-    --bw 5 \
-    --delay 50ms \
-    --loss 2
-"""
-
 import argparse
 import csv
 import os
-import re
-import shutil
 import subprocess
 import sys
+import shutil
+import time
 from datetime import datetime
 from pathlib import Path
 
-DEFAULT_EXPERIMENTS = [
-    {"name": "period_50ms",  "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "50ms"},
-    {"name": "period_200ms", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "200ms"},
-    {"name": "period_500ms", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 2, "period": "500ms"},
-    
-    {"name": "TTL1", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 1},
-    {"name": "TTL2", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 2},
-    {"name": "TTL4", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 4},
-    {"name": "TTL8", "hosts": 10, "bw": 10, "delay": "20ms", "loss": 0, "fanout": 1, "ttl": 8},
 
-]
-
-
-
-
-GOSSIP_LOG_GLOB = "/tmp/gossip-*.jsonl"
-
-
-# -----------------------
-# CLI
-# -----------------------
-
-def parse_args():
-    p = argparse.ArgumentParser(
-        description="Run gossip experiments and save logs/results (no plotting)."
-    )
-
-    p.add_argument(
-        "--bin",
-        default="bin/linux/gossipd",
-        help="Path to gossipd binary (default: bin/linux/gossipd).",
-    )
-
-    # Suite naming
-    p.add_argument(
-        "--suite-name",
-        default=None,
-        help="Optional name for this whole experiment suite. "
-             "If omitted, a timestamp-based name is used."
-    )
-
-    # Optional: single custom experiment instead of defaults
-    p.add_argument("--exp-name", default=None,
-                   help="If set, run a single custom experiment with this name.")
-    p.add_argument("--hosts", type=int, default=3,
-                   help="Number of hosts for custom experiment.")
-    p.add_argument("--bw", type=float, default=10.0,
-                   help="Bandwidth (Mbps) for custom experiment.")
-    p.add_argument("--delay", default="10ms",
-                   help="Delay for custom experiment (e.g. 10ms, 50ms).")
-    p.add_argument("--loss", type=float, default=0.0,
-                   help="Loss percentage for custom experiment.")
-
-    return p.parse_args()
-
-
-# -----------------------
+# =============================================================
 # Helpers
-# -----------------------
+# =============================================================
 
 def run_cmd(cmd, cwd=None, check=True):
-    print(f"[CMD] {cmd} (cwd={cwd or os.getcwd()})")
+    print(f"[CMD] {cmd}  (cwd={cwd or os.getcwd()})")
     return subprocess.run(
         cmd,
         cwd=cwd,
         shell=isinstance(cmd, str),
         check=check,
         capture_output=False,
-        text=True,
+        text=True
     )
 
 
-def run_and_capture(cmd, cwd=None):
+def run_capture(cmd, cwd=None):
     proc = subprocess.run(
         cmd,
         cwd=cwd,
         shell=isinstance(cmd, str),
-        check=False,
         capture_output=True,
-        text=True,
+        text=True
     )
     return proc.returncode, proc.stdout, proc.stderr
 
 
 def clean_environment():
-    print("[INFO] Cleaning Mininet and old logs")
+    print("[INFO] Cleaning Mininet, old logs, old daemons")
     run_cmd(["mn", "-c"], check=False)
-    run_cmd("pkill gossipd || true", check=False)
-    run_cmd(f"rm -f {GOSSIP_LOG_GLOB}", check=False)
+    run_cmd("pkill -9 gossipd || true", check=False)
+    run_cmd("rm -f /tmp/gossip-*.jsonl", check=False)
 
 
-def parse_analyzer_output(stdout: str):
-    """
-    Parse convergence summary from analyze_logs.py output.
-
-    Returns (nodes_delivered, convergence_sec).
-    """
-    nodes = None
-    conv = None
-
-    for line in stdout.splitlines():
-        m_nodes = re.search(
-            r"Nodes that delivered rumor .*: (\d+)", line
-        )
-        if m_nodes:
-            nodes = int(m_nodes.group(1))
-
-        m_conv = re.search(
-            r"Convergence time \(sec\):\s+([0-9.]+)", line
-        )
-        if m_conv:
-            conv = float(m_conv.group(1))
-
-    return nodes, conv
+def fresh_suite_dir(root: Path, name: str):
+    suite_dir = root / name
+    if suite_dir.exists():
+        print(f"[WARN] Suite dir exists, deleting: {suite_dir}")
+        shutil.rmtree(suite_dir)
+    suite_dir.mkdir(parents=True)
+    return suite_dir
 
 
-def make_suite_dir(project_dir: Path, suite_name_arg: str | None) -> Path:
-    """
-    Decide suite name and create a unique directory under experiments/.
-    If suite_name_arg is None, generate a timestamp name.
-    If name exists, append _2, _3, etc.
-    """
-    experiments_root = project_dir / "experiments"
-    experiments_root.mkdir(exist_ok=True)
-
-    if suite_name_arg:
-        base = suite_name_arg
-    else:
-        base = "suite_" + datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    suite_dir = experiments_root / base
-    if not suite_dir.exists():
-        suite_dir.mkdir()
-        print(f"[INFO] Suite directory: {suite_dir}")
-        return suite_dir
-
-    idx = 2
-    while True:
-        cand = experiments_root / f"{base}_{idx}"
-        if not cand.exists():
-            cand.mkdir()
-            print(f"[INFO] Suite directory exists, using: {cand}")
-            return cand
-        idx += 1
+def read_convergence_txt(path):
+    try:
+        with open(path, "r") as f:
+            return float(f.read().strip())
+    except:
+        return None
 
 
-def archive_logs(exp_dir: Path):
-    logs_dir = exp_dir / "logs"
-    logs_dir.mkdir(parents=True, exist_ok=True)
-
-    for path in Path("/tmp").glob("gossip-*.jsonl"):
-        target = logs_dir / path.name
-        print(f"[INFO] Archiving {path} -> {target}")
-        shutil.copy2(path, target)
-
-
-def append_results_row(row, results_csv_path: Path):
-    file_exists = results_csv_path.exists()
-    with results_csv_path.open("a", newline="") as f:
+def append_results_row(result_row, csv_path):
+    file_exists = csv_path.exists()
+    with csv_path.open("a", newline="") as f:
         writer = csv.writer(f)
         if not file_exists:
             writer.writerow([
                 "name", "hosts", "bw", "delay", "loss",
-                "success", "nodes_delivered", "convergence_sec",
+                "success", "nodes_delivered", "convergence_sec"
             ])
         writer.writerow([
-            row["name"],
-            row["hosts"],
-            row["bw"],
-            row["delay"],
-            row["loss"],
-            int(row["success"]),
-            row["nodes_delivered"],
-            row["convergence_sec"],
+            result_row["name"],
+            result_row["hosts"],
+            result_row["bw"],
+            result_row["delay"],
+            result_row["loss"],
+            int(result_row["success"]),
+            result_row["nodes_delivered"],
+            result_row["convergence_sec"],
         ])
 
 
-# -----------------------
-# Core experiment runner
-# -----------------------
+# =============================================================
+# Experiment Definitions
+# =============================================================
 
-def run_experiment(exp, project_dir: Path, bin_path: str, suite_dir: Path):
+def load_suite_config(name):
     """
-    Run a single experiment:
-      - clean env
-      - run topo.py in headless mode
-      - run analyze_logs.py
-      - archive logs into suite/<exp_name>/logs
-      - return summary row
+    Predefined experiment suites.
+    MINIMAL CHANGE: We only add new suites here.
     """
+
+    # Existing working suites
+    if name == "scaling_N":
+        return [
+            {"name": f"n{n}", "hosts": n, "bw": 10, "delay": "10ms", "loss": 0}
+            for n in [5, 10, 20, 30, 40, 50, 100, 200]
+        ]
+
+    if name == "fanout_sweep":
+        return [
+            {"name": f"fanout{f}", "hosts": 100, "bw": 10, "delay": "10ms", "loss": 0, "fanout": f}
+            for f in [1, 2, 4, 8, 16, 32]
+        ]
+
+    if name == "loss_sweep":
+        return [
+            {"name": f"loss{p}", "hosts": 20, "bw": 10, "delay": "10ms", "loss": p}
+            for p in [0, 5, 10, 20, 40]
+        ]
+
+    if name == "delay_sweep":
+        return [
+            {"name": f"delay{d}", "hosts": 20, "bw": 10, "delay": f"{d}ms", "loss": 0}
+            for d in [0, 10, 20, 40, 80]
+        ]
+
+    # NEW SUITE: Jitter sweep (uses optional jitter flag)
+    if name == "jitter_sweep":
+        return [
+            {"name": f"jitter{j}", "hosts": 20, "bw": 10, "delay": "20ms", "loss": 0, "jitter": f"{j}ms"}
+            for j in [0, 5, 10, 20, 40]
+        ]
+
+    # NEW SUITE: Churn sweep (we simulate churn later in topo)
+    if name == "churn_sweep":
+        return [
+            {"name": f"churn{k}", "hosts": 20, "bw": 10, "delay": "20ms", "loss": 0, "churn": k}
+            for k in [1, 3, 5]
+        ]
+
+    # NEW SUITE: Zombie tests
+    if name == "zombie_test":
+        return [
+            {"name": "zombie_one_dead", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "zombie": 1},
+            {"name": "zombie_two_dead", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "zombie": 2},
+        ]
+
+    print(f"[ERROR] Unknown suite: {name}")
+    sys.exit(1)
+
+
+# =============================================================
+# Core Experiment Logic
+# =============================================================
+
+def run_experiment(exp, bin_path, suite_dir: Path, project_dir: Path):
     name = exp["name"]
-    hosts = exp["hosts"]
-    bw = exp["bw"]
-    delay = exp["delay"]
-    loss = exp["loss"]
-
-    print(f"\n========== Experiment: {name} ==========")
-
-    rumor_id = f"{name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    print(f"\n========== Running experiment: {name} ==========")
 
     clean_environment()
 
     exp_dir = suite_dir / name
     exp_dir.mkdir(exist_ok=True)
 
-    # Run topo.py headless
-    fanout = exp.get("fanout", 3)
-    ttl = exp.get("ttl", 8)
-    period = exp.get("period", "200ms")
+    rumor_id = f"{name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     topo_cmd = [
         "python3", "topo.py",
         "--bin", bin_path,
-        "--hosts", str(hosts),
-        "--bw", str(bw),
-        "--delay", delay,
-        "--loss", str(loss),
-        "--fanout", str(fanout),
-        "--ttl", str(ttl),
-        "--period", period,
+        "--hosts", str(exp["hosts"]),
+        "--bw", str(exp.get("bw", 10)),
+        "--delay", exp.get("delay", "10ms"),
+        "--loss", str(exp.get("loss", 0)),
+        "--fanout", str(exp.get("fanout", 3)),
+        "--ttl", "12",
+        "--period", "200ms",
         "--metrics-port", "9080",
         "--logdir", "/tmp",
         "--no-cli",
         "--inject-rumor", rumor_id,
         "--inject-ttl", "8",
-        "--runtime", "2.0",
+        "--runtime", "4.0"
     ]
+
+    # Add optional netem params IF present
+    for key in ["jitter", "reorder", "duplicate", "corrupt", "burst"]:
+        if key in exp:
+            topo_cmd += [f"--{key}", str(exp[key])]
+
+    # Add churn/zombie flags (passed to topo.py)
+    if "churn" in exp:
+        topo_cmd += ["--churn", str(exp["churn"])]
+    if "zombie" in exp:
+        topo_cmd += ["--zombie", str(exp["zombie"])]
+
     run_cmd(topo_cmd, cwd=project_dir)
 
     # Analyze logs
-    analyzer_cmd = [
+    analyze_cmd = [
         "python3", "analyze_logs.py",
         "--rumor-id", rumor_id,
-        "--log-glob", GOSSIP_LOG_GLOB,
-        "--min-hosts", str(hosts),
+        "--log-glob", "/tmp/gossip-*.jsonl",
+        "--outdir", str(exp_dir),
+        "--min-hosts", str(exp["hosts"])
     ]
-    ret, out, err = run_and_capture(analyzer_cmd, cwd=project_dir)
-    print("----- analyzer stdout -----")
-    print(out)
-    if err.strip():
-        print("----- analyzer stderr -----")
-        print(err)
-
+    ret, out, err = run_capture(analyze_cmd, cwd=project_dir)
     success = (ret == 0)
-    nodes_delivered, convergence_sec = parse_analyzer_output(out)
 
-    archive_logs(exp_dir)
+    convergence_path = exp_dir / "convergence.txt"
+    conv = read_convergence_txt(convergence_path)
+
+    # Count delivered nodes
+    delivered = 0
+    node_times_path = exp_dir / "node_delivery_times.csv"
+    if node_times_path.exists():
+        try:
+            import pandas as pd
+            delivered = len(pd.read_csv(node_times_path))
+        except:
+            delivered = 0
 
     return {
         "name": name,
-        "hosts": hosts,
-        "bw": bw,
-        "delay": delay,
-        "loss": loss,
+        "hosts": exp["hosts"],
+        "bw": exp.get("bw", 10),
+        "delay": exp.get("delay", "10ms"),
+        "loss": exp.get("loss", 0),
         "success": success,
-        "nodes_delivered": nodes_delivered,
-        "convergence_sec": convergence_sec,
+        "nodes_delivered": delivered,
+        "convergence_sec": conv
     }
 
 
-def main():
-    if os.geteuid() != 0:
-        print("ERROR: run this script with sudo (Mininet requires root).", file=sys.stderr)
-        sys.exit(1)
+# =============================================================
+# Main
+# =============================================================
 
-    args = parse_args()
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--suite-name", "--suite", required=True)
+    parser.add_argument("--bin", default="bin/linux/gossipd")
+    args = parser.parse_args()
 
     project_dir = Path(__file__).resolve().parent
-    os.chdir(project_dir)
+    experiments_root = project_dir / "experiments"
 
-    suite_dir = make_suite_dir(project_dir, args.suite_name)
-    results_csv_path = suite_dir / "results.csv"
+    suite_name = args.suite_name
+    suite_dir = fresh_suite_dir(experiments_root, suite_name)
 
-    if args.exp_name:
-        experiments = [{
-            "name": args.exp_name,
-            "hosts": args.hosts,
-            "bw": args.bw,
-            "delay": args.delay,
-            "loss": args.loss,
-        }]
-    else:
-        experiments = DEFAULT_EXPERIMENTS
+    experiments = load_suite_config(suite_name)
 
-    all_results = []
+    results_csv = suite_dir / f"{suite_name}_results.csv"
+    print(f"[INFO] Saving results to: {results_csv}")
 
     for exp in experiments:
-        result = run_experiment(exp, project_dir, args.bin, suite_dir)
-        all_results.append(result)
-        append_results_row(result, results_csv_path)
+        res = run_experiment(exp, args.bin, suite_dir, project_dir)
+        append_results_row(res, results_csv)
 
-    print(f"\n[INFO] All experiments done.")
-    print(f"[INFO] Suite directory: {suite_dir}")
-    print(f"[INFO] Results: {results_csv_path}")
-    print(f"[INFO] Per-experiment logs under: {suite_dir}/<exp_name>/logs/")
+    print("\n[INFO] Finished suite:", suite_name)
+    print("[INFO] Results saved to:", results_csv)
 
 
 if __name__ == "__main__":

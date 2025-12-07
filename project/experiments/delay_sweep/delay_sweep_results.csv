@@ -1,0 +1,6 @@
+name,hosts,bw,delay,loss,success,nodes_delivered,convergence_sec
+delay0,20,10,0ms,0,1,20,0.592910866
+delay10,20,10,10ms,0,1,20,0.857979454
+delay20,20,10,20ms,0,1,20,0.918958241
+delay40,20,10,40ms,0,1,20,1.635278976
+delay80,20,10,80ms,0,1,18,2.47130969

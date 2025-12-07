@@ -1,0 +1,3 @@
+name,hosts,bw,delay,loss,success,nodes_delivered,convergence_sec
+zombie_one_dead,20,10,10ms,0,1,1,9.1602e-05
+zombie_two_dead,20,10,10ms,0,1,19,1.05195319

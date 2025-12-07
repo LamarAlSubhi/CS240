@@ -14,14 +14,18 @@ type Store struct {
 	seen   map[string]Rumor // rumor ID -> Rumor
 	newIDs []string         // rumors to push in next tick
 	logf   *os.File
+
+	nodeID string // NEW: which node is this store attached to
+
 }
 
 // NewStore initializes the store and opens the log file.
-func NewStore(path string) *Store {
+func NewStore(path string, nodeID string) *Store {
 	f, _ := os.Create(path)
 	return &Store{
 		seen: map[string]Rumor{},
 		logf: f,
+		nodeID: nodeID,
 	}
 }
 
@@ -44,7 +48,9 @@ func (s *Store) Add(r Rumor) bool {
 	}
 	s.seen[r.ID] = r
 	s.newIDs = append(s.newIDs, r.ID)
-	s.writeLog("deliver", r.ID, len(r.Body))
+	
+	// "deliver" = this node has just learned this rumor
+	s.writeLog("deliver", r)
 	return true
 }
 
@@ -86,19 +92,31 @@ func (s *Store) DigestCount() int {
 }
 
 // writeLog appends a JSONL record of an event to the log file.
-func (s *Store) writeLog(ev string, id string, sz int) {
+func (s *Store) writeLog(ev string, r Rumor) {
+	if s.logf == nil {
+		return
+	}
+
 	type LogRec struct {
-		TS int64  `json:"ts"`
-		Ev string `json:"ev"`
-		ID string `json:"id"`
-		Sz int    `json:"sz"`
+		TS       int64  `json:"ts"`                 // event time (this node)
+		Node     string `json:"node"`               // which node logged this
+		Ev       string `json:"ev"`                 // "inject" | "deliver" | ...
+		ID       string `json:"id"`                 // rumor id
+		Sz       int    `json:"sz"`                 // body size
+		Origin   string `json:"origin,omitempty"`   // origin node (if set)
+		InjectTS int64  `json:"inject_ts,omitempty"`// injection time at origin (if set)
 	}
+
 	rec := LogRec{
-		TS: time.Now().UnixNano(),
-		Ev: ev,
-		ID: id,
-		Sz: sz,
+		TS:       time.Now().UnixNano(),
+		Node:     s.nodeID,
+		Ev:       ev,
+		ID:       r.ID,
+		Sz:       len(r.Body),
+		Origin:   r.Origin,
+		InjectTS: r.InjectTS,
 	}
+
 	b, _ := json.Marshal(rec)
 	_, _ = s.logf.Write(append(b, '\n'))
 }

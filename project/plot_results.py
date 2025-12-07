@@ -1,212 +1,189 @@
 #!/usr/bin/env python3
-import os
-import sys
 import argparse
+import os
+import json
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-
-EXPERIMENTS_DIR = "experiments"
 
 
-# ================================================================
-# Helpers
-# ================================================================
+# ============================================================
+# Helper
+# ============================================================
 
-def safe_mkdir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+def load_results_csv(suite_name):
+    suite_dir = os.path.join("experiments", suite_name)
+    results_path = os.path.join(suite_dir, f"{suite_name}_results.csv")
 
+    if not os.path.exists(results_path):
+        print(f"[ERROR] results file not found at: {results_path}")
+        return None, suite_dir
 
-def load_results(suite):
-    path = os.path.join(EXPERIMENTS_DIR, suite, "results.csv")
-    if not os.path.isfile(path):
-        print(f"[ERROR] results.csv not found: {path}")
-        sys.exit(1)
-
-    df = pd.read_csv(path)
-
-    # Normalize convergence column
-    if "convergence_sec" in df.columns:
-        df["convergence"] = pd.to_numeric(df["convergence_sec"], errors="coerce")
-    else:
-        raise RuntimeError("results.csv missing convergence_sec")
-
-    # extract delay as numeric
-    if "delay" in df.columns:
-        df["delay_ms"] = df["delay"].str.replace("ms", "", regex=False)
-        df["delay_ms"] = pd.to_numeric(df["delay_ms"], errors="coerce")
-
-    df["loss_pct"] = pd.to_numeric(df["loss"], errors="coerce")
-    df["nodes_delivered"] = pd.to_numeric(df["nodes_delivered"], errors="coerce")
-
-    return df
+    df = pd.read_csv(results_path)
+    return df, suite_dir
 
 
-def detect_varying(df):
-    sweep = []
-    for col in ["hosts", "fanout", "loss_pct", "delay_ms"]:
-        if col in df and df[col].nunique() > 1:
-            sweep.append(col)
-    return sweep
+def safe_save(path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
-# ================================================================
-# Plot types
-# ================================================================
+# ============================================================
+# Plot: Convergence vs N
+# ============================================================
 
-def plot_ranked(df, outdir):
-    sub = df.dropna(subset=["convergence"]).sort_values("convergence")
+def plot_convergence_vs_n(df, outdir):
+    if "hosts" not in df or "convergence_sec" not in df:
+        return
 
-    plt.figure(figsize=(12, 5))
-    sns.barplot(data=sub, x="name", y="convergence", palette="Blues_d")
-    plt.xticks(rotation=45, ha="right")
-    plt.title("Ranked Convergence Times (Fast → Slow)")
-    plt.tight_layout()
+    df_sorted = df.sort_values("hosts")
 
-    path = os.path.join(outdir, "ranked_convergence.png")
-    plt.savefig(path)
-    plt.close()
-    print(f"[PLOT] {path}")
-
-
-def plot_distribution(df, outdir):
-    sub = df.dropna(subset=["convergence"])
-
-    # Histogram + KDE
-    plt.figure(figsize=(10, 4))
-    sns.histplot(sub["convergence"], kde=True, bins=10, color="steelblue")
-    plt.title("Distribution of Convergence Times")
-    plt.xlabel("Convergence (sec)")
-    plt.tight_layout()
-    path = os.path.join(outdir, "distribution.png")
-    plt.savefig(path)
-    plt.close()
-    print(f"[PLOT] {path}")
-
-    # CDF
-    sorted_vals = sub["convergence"].sort_values()
-    y = [i / len(sorted_vals) for i in range(len(sorted_vals))]
-
-    plt.figure(figsize=(10, 4))
-    plt.plot(sorted_vals, y)
-    plt.title("CDF of Convergence Times")
-    plt.xlabel("Convergence (sec)")
-    plt.ylabel("Probability")
+    plt.figure(figsize=(8, 4))
+    plt.plot(df_sorted["hosts"], df_sorted["convergence_sec"], marker="o")
+    plt.xlabel("Number of Nodes (N)")
+    plt.ylabel("Convergence Time (sec)")
+    plt.title("Convergence Time vs Number of Nodes")
     plt.grid(True)
-    plt.tight_layout()
-    path = os.path.join(outdir, "cdf.png")
-    plt.savefig(path)
+
+    outpath = os.path.join(outdir, "convergence_vs_nodes.png")
+    plt.savefig(outpath)
     plt.close()
-    print(f"[PLOT] {path}")
 
 
-def plot_correlation(df, outdir):
-    numeric = df.select_dtypes(include=["number"])
-    corr = numeric.corr()
+# ============================================================
+# Plot: Convergence vs Loss
+# ============================================================
 
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
-    plt.title("Correlation Between Parameters")
-    plt.tight_layout()
+def plot_convergence_vs_loss(df, outdir):
+    if "loss" not in df or "convergence_sec" not in df:
+        return
 
-    path = os.path.join(outdir, "correlation_heatmap.png")
-    plt.savefig(path)
-    plt.close()
-    print(f"[PLOT] {path}")
+    # ensure loss is numeric
+    df["loss_num"] = df["loss"].astype(str).str.replace("%", "").astype(float)
 
+    df_sorted = df.sort_values("loss_num")
 
-def plot_nodes_vs_convergence(df, outdir):
-    sub = df.dropna(subset=["nodes_delivered", "convergence"])
-
-    plt.figure(figsize=(6, 5))
-    sns.scatterplot(data=sub, x="nodes_delivered", y="convergence", s=100)
-    plt.title("Nodes Delivered vs Convergence Time")
+    plt.figure(figsize=(8, 4))
+    plt.plot(df_sorted["loss_num"], df_sorted["convergence_sec"], marker="o")
+    plt.xlabel("Packet Loss (%)")
+    plt.ylabel("Convergence Time (sec)")
+    plt.title("Convergence vs Loss Rate")
     plt.grid(True)
-    plt.tight_layout()
 
-    path = os.path.join(outdir, "nodes_vs_convergence.png")
-    plt.savefig(path)
+    outpath = os.path.join(outdir, "convergence_vs_loss.png")
+    plt.savefig(outpath)
     plt.close()
-    print(f"[PLOT] {path}")
 
 
-def plot_sweep(df, param, outdir):
-    plt.figure(figsize=(8, 5))
-    sns.lineplot(data=df, x=param, y="convergence", marker="o")
-    sns.scatterplot(data=df, x=param, y="convergence", s=120)
-    plt.title(f"{param} Sweep")
-    plt.tight_layout()
+# ============================================================
+# Plot: Convergence vs Fanout
+# ============================================================
 
-    path = os.path.join(outdir, f"{param}_sweep.png")
-    plt.savefig(path)
+def plot_convergence_vs_fanout(df, outdir):
+    if "fanout" not in df or "convergence_sec" not in df:
+        return
+
+    df_sorted = df.sort_values("fanout")
+
+    plt.figure(figsize=(8, 4))
+    plt.plot(df_sorted["fanout"], df_sorted["convergence_sec"], marker="o")
+    plt.xlabel("Fanout")
+    plt.ylabel("Convergence Time (sec)")
+    plt.title("Convergence vs Fanout")
+    plt.grid(True)
+
+    outpath = os.path.join(outdir, "convergence_vs_fanout.png")
+    plt.savefig(outpath)
     plt.close()
-    print(f"[PLOT] {path}")
 
 
-# ================================================================
-# Stats tables
-# ================================================================
+# ============================================================
+# Plot: Convergence vs Delay
+# ============================================================
 
-def table_stats(df, outdir):
-    sub = df.dropna(subset=["convergence"])
-    stats = sub["convergence"].describe()
+def plot_convergence_vs_delay(df, outdir):
+    if "delay" not in df or "convergence_sec" not in df:
+        return
 
-    out = os.path.join(outdir, "convergence_stats.csv")
-    stats.to_csv(out)
-    print(f"[TABLE] {out}")
+    # Extract numeric ms value
+    df["delay_ms"] = df["delay"].astype(str).str.replace("ms", "").astype(float)
+    df_sorted = df.sort_values("delay_ms")
 
+    plt.figure(figsize=(8, 4))
+    plt.plot(df_sorted["delay_ms"], df_sorted["convergence_sec"], marker="o")
+    plt.xlabel("Delay (ms)")
+    plt.ylabel("Convergence Time (sec)")
+    plt.title("Convergence vs Delay")
+    plt.grid(True)
 
-def table_ranking(df, outdir):
-    sub = df[["name", "convergence", "nodes_delivered"]].dropna()
-    sub = sub.sort_values("convergence")
-
-    out = os.path.join(outdir, "ranking_table.csv")
-    sub.to_csv(out, index=False)
-    print(f"[TABLE] {out}")
-
-
-# ================================================================
-# Main plotting
-# ================================================================
-
-def plot_suite(df, suite_dir):
-    outdir = os.path.join(suite_dir, "plots")
-    safe_mkdir(outdir)
-
-    varying = detect_varying(df)
-
-    # Sweep plots
-    for p in varying:
-        plot_sweep(df.dropna(subset=["convergence"]), p, outdir)
-
-    # Universal plots
-    plot_ranked(df, outdir)
-    plot_distribution(df, outdir)
-    plot_correlation(df, outdir)
-    plot_nodes_vs_convergence(df, outdir)
-
-    # Tables
-    table_stats(df, outdir)
-    table_ranking(df, outdir)
-
-    print(f"[INFO] All plots saved in {outdir}")
+    outpath = os.path.join(outdir, "convergence_vs_delay.png")
+    plt.savefig(outpath)
+    plt.close()
 
 
-# ================================================================
-# Entry point
-# ================================================================
+# ============================================================
+# Scan subfolders for delivery CDFs and combine (optional)
+# ============================================================
+
+def plot_combined_cdf(suite_dir):
+    cdfs = []
+    labels = []
+
+    for root, dirs, files in os.walk(suite_dir):
+        if "delivery_cdf.png" in files:
+            p = os.path.join(root, "delivery_cdf.png")
+            labels.append(os.path.basename(root))
+            cdfs.append(p)
+
+    if len(cdfs) == 0:
+        return
+
+    print(f"[INFO] Found {len(cdfs)} CDFs for combined plot")
+
+    # Just stack images vertically as a combined report
+    from PIL import Image
+
+    images = [Image.open(p) for p in cdfs]
+    widths = [img.width for img in images]
+    heights = [img.height for img in images]
+
+    total_h = sum(heights)
+    max_w = max(widths)
+
+    combined = Image.new("RGB", (max_w, total_h), "white")
+
+    y_offset = 0
+    for img in images:
+        combined.paste(img, (0, y_offset))
+        y_offset += img.height
+
+    combined.save(os.path.join(suite_dir, "combined_delivery_cdfs.png"))
+
+    print("[INFO] combined_delivery_cdfs.png generated")
+
+
+# ============================================================
+# MAIN
+# ============================================================
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--suite", required=True)
+    ap.add_argument("--suite-name", required=True)
     args = ap.parse_args()
 
-    df = load_results(args.suite)
-    print(f"[INFO] Loaded {len(df)} experiments from suite: {args.suite}")
+    df, suite_dir = load_results_csv(args.suite_name)
+    if df is None:
+        return
 
-    suite_dir = os.path.join(EXPERIMENTS_DIR, args.suite)
-    plot_suite(df, suite_dir)
+    # High-level plots
+    plot_convergence_vs_n(df, suite_dir)
+    plot_convergence_vs_loss(df, suite_dir)
+    plot_convergence_vs_fanout(df, suite_dir)
+    plot_convergence_vs_delay(df, suite_dir)
+
+    # Optional combined plot from subfolders
+    plot_combined_cdf(suite_dir)
+
+    print(f"[INFO] Plotting complete for suite: {args.suite_name}")
 
 
 if __name__ == "__main__":

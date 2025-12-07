@@ -1,0 +1,7 @@
+name,hosts,bw,delay,loss,success,nodes_delivered,convergence_sec
+fanout1,100,10,10ms,0,1,9,1.290662818
+fanout2,100,10,10ms,0,1,62,1.624992517
+fanout4,100,10,10ms,0,1,99,0.943453216
+fanout8,100,10,10ms,0,1,100,0.59170298
+fanout16,100,10,10ms,0,1,100,0.390564842
+fanout32,100,10,10ms,0,1,100,0.267842955
