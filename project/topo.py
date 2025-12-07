@@ -168,6 +168,7 @@ def main():
         log_dir=args.logdir,
         zombie=args.zombie
     )
+    time.sleep(1.5)
 
     time.sleep(1.0)
 
