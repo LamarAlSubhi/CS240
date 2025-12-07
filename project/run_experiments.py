@@ -88,12 +88,15 @@ def append_results_row(result_row, csv_path):
 
 def load_suite_config(name):
     """
-    Predefined suites.
+    Predefined experiment suites.
+    MINIMAL CHANGE: We only add new suites here.
     """
+
+    # Existing working suites
     if name == "scaling_N":
         return [
             {"name": f"n{n}", "hosts": n, "bw": 10, "delay": "10ms", "loss": 0}
-            for n in [5, 10, 20, 30, 40, 50]
+            for n in [5, 10, 20, 30, 40, 50, 100, 200]
         ]
 
     if name == "fanout_sweep":
@@ -114,21 +117,25 @@ def load_suite_config(name):
             for d in [0, 10, 20, 40, 80]
         ]
 
+    # NEW SUITE: Jitter sweep (uses optional jitter flag)
     if name == "jitter_sweep":
         return [
             {"name": f"jitter{j}", "hosts": 20, "bw": 10, "delay": "20ms", "loss": 0, "jitter": f"{j}ms"}
             for j in [0, 5, 10, 20, 40]
         ]
 
+    # NEW SUITE: Churn sweep (we simulate churn later in topo)
     if name == "churn_sweep":
         return [
-            {"name": f"churn{k}", "hosts": 20, "bw": 10, "delay": "20ms", "loss": 0}
+            {"name": f"churn{k}", "hosts": 20, "bw": 10, "delay": "20ms", "loss": 0, "churn": k}
             for k in [1, 3, 5]
         ]
 
+    # NEW SUITE: Zombie tests
     if name == "zombie_test":
         return [
-            {"name": "zombie_single", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0}
+            {"name": "zombie_one_dead", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "zombie": 1},
+            {"name": "zombie_two_dead", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "zombie": 2},
         ]
 
     print(f"[ERROR] Unknown suite: {name}")
@@ -168,12 +175,16 @@ def run_experiment(exp, bin_path, suite_dir: Path, project_dir: Path):
         "--runtime", "4.0"
     ]
 
-    # Add optional netem params
-    if "jitter" in exp:    topo_cmd += ["--jitter", exp["jitter"]]
-    if "reorder" in exp:   topo_cmd += ["--reorder", str(exp["reorder"])]
-    if "corrupt" in exp:   topo_cmd += ["--corrupt", str(exp["corrupt"])]
-    if "duplicate" in exp: topo_cmd += ["--duplicate", str(exp["duplicate"])]
-    if "burst" in exp:     topo_cmd += ["--burst", str(exp["burst"])]
+    # Add optional netem params IF present
+    for key in ["jitter", "reorder", "duplicate", "corrupt", "burst"]:
+        if key in exp:
+            topo_cmd += [f"--{key}", str(exp[key])]
+
+    # Add churn/zombie flags (passed to topo.py)
+    if "churn" in exp:
+        topo_cmd += ["--churn", str(exp["churn"])]
+    if "zombie" in exp:
+        topo_cmd += ["--zombie", str(exp["zombie"])]
 
     run_cmd(topo_cmd, cwd=project_dir)
 
@@ -193,11 +204,11 @@ def run_experiment(exp, bin_path, suite_dir: Path, project_dir: Path):
 
     # Count delivered nodes
     delivered = 0
-    delivery_curve_path = exp_dir / "node_delivery_times.csv"
-    if delivery_curve_path.exists():
+    node_times_path = exp_dir / "node_delivery_times.csv"
+    if node_times_path.exists():
         try:
             import pandas as pd
-            delivered = len(pd.read_csv(delivery_curve_path))
+            delivered = len(pd.read_csv(node_times_path))
         except:
             delivered = 0
 
@@ -234,10 +245,8 @@ def main():
     results_csv = suite_dir / f"{suite_name}_results.csv"
     print(f"[INFO] Saving results to: {results_csv}")
 
-    all_results = []
     for exp in experiments:
         res = run_experiment(exp, args.bin, suite_dir, project_dir)
-        all_results.append(res)
         append_results_row(res, results_csv)
 
     print("\n[INFO] Finished suite:", suite_name)

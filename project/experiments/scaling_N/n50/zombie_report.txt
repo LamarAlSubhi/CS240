@@ -1,5 +1,5 @@
-Total hosts: 48
-Delivered: 40/48
-Zombie nodes (never delivered): ['11', '13', '14', '2', '20', '3', '33', '4', '8', '9']
-Nodes that never sent: ['11', '13', '14', '2', '20', '3', '33', '4', '8', '9']
-Nodes that never received: ['1', '11', '13', '14', '20', '3', '33', '4', '8', '9']
+Total hosts: 50
+Delivered: 47/50
+Zombie nodes (never delivered): ['18', '35', '39']
+Nodes that never sent: ['18', '35', '39']
+Nodes that never received: ['18', '35', '39']

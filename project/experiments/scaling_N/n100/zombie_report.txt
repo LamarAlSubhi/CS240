@@ -1,0 +1,5 @@
+Total hosts: 100
+Delivered: 98/100
+Zombie nodes (never delivered): ['28', '55']
+Nodes that never sent: ['28', '55']
+Nodes that never received: ['28', '55']

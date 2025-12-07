@@ -1,5 +1,5 @@
 Total hosts: 30
-Delivered: 26/30
-Zombie nodes (never delivered): ['19', '2', '22', '6']
-Nodes that never sent: ['19', '2', '22', '6']
-Nodes that never received: ['2', '22', '6']
+Delivered: 28/30
+Zombie nodes (never delivered): ['16', '21']
+Nodes that never sent: ['16', '21']
+Nodes that never received: ['16', '21']
