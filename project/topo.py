@@ -24,21 +24,45 @@ class GossipTopo(Topo):
     Each host gets identical link characteristics.
     """
 
-    def build(self, n_hosts, bw, delay, loss):
+    def build(self, n_hosts, bw, delay, loss, **kwargs):
         s1 = self.addSwitch("s1", cls=OVSBridge)
+        # store netem params passed from CLI
+        self.jitter = kwargs.get("jitter", "0ms")
+        self.reorder = float(kwargs.get("reorder", 0))
+        self.corrupt = float(kwargs.get("corrupt", 0))
+        self.duplicate = float(kwargs.get("duplicate", 0))
         self.hosts_list = []
 
         for i in range(1, n_hosts + 1):
             host = self.addHost(f"h{i}")
 
             # Add symmetric link with specified characteristics
+            link_params = {
+                "bw": bw,
+                "delay": delay,
+                "loss": loss,
+            }
+
+            # OPTIONAL NETEM PARAMETERS
+            if hasattr(self, "jitter") and self.jitter != "0ms":
+                link_params["jitter"] = self.jitter
+
+            if hasattr(self, "reorder") and self.reorder > 0:
+                link_params["reorder"] = self.reorder
+
+            if hasattr(self, "corrupt") and self.corrupt > 0:
+                link_params["corrupt"] = self.corrupt
+
+            if hasattr(self, "duplicate") and self.duplicate > 0:
+                link_params["duplicate"] = self.duplicate
+
             self.addLink(
                 host, s1,
                 cls=TCLink,
-                bw=bw,
-                delay=delay,
-                loss=loss
+                **link_params
             )
+
+
 
             self.hosts_list.append(host)
 
@@ -117,6 +141,15 @@ def parse_args():
                         help="Propagation delay.")
     parser.add_argument("--loss", type=float, default=0,
                         help="Packet loss percentage.")
+    parser.add_argument("--jitter", default="0ms",
+                    help="packet jitter to add (optional)")
+    parser.add_argument("--reorder", type=float, default=0,
+                        help="packet reordering % (optional)")
+    parser.add_argument("--corrupt", type=float, default=0,
+                        help="packet corruption % (optional)")
+    parser.add_argument("--duplicate", type=float, default=0,
+                        help="packet duplication % (optional)")
+
 
     # Gossip protocol parameters
     parser.add_argument("--fanout", type=int, default=3)
@@ -169,11 +202,18 @@ def main():
 
     # Build topology the Mininet way (params passed into build())
     topo = GossipTopo(
-        n_hosts=args.hosts,
-        bw=args.bw,
-        delay=args.delay,
-        loss=args.loss,
+    n_hosts=args.hosts,
+    bw=args.bw,
+    delay=args.delay,
+    loss=args.loss,
     )
+
+    # attach jitter/etc as attributes
+    topo.jitter = args.jitter
+    topo.reorder = args.reorder
+    topo.corrupt = args.corrupt
+    topo.duplicate = args.duplicate
+
 
     net = Mininet(
         topo=topo,
