@@ -24,8 +24,12 @@ def load_logs(pattern):
     return logs
 
 
+def normalize_ts(logs, inject_ts):
+    return (logs - inject_ts) / 1e9
+
+
 # =========================
-# Parse events
+# Parsing events
 # =========================
 
 def parse_events(logs, rumor_id):
@@ -56,11 +60,11 @@ def parse_events(logs, rumor_id):
 
 
 # =========================
-# Plot: Delivery CDF
+# Plot 1: Delivery CDF
 # =========================
 
-def plot_delivery_cdf(latencies, outdir):
-    x = sorted(latencies)
+def plot_delivery_cdf(delivery_latencies, outdir):
+    x = sorted(delivery_latencies)
     y = np.linspace(0, 1, len(x))
 
     plt.figure(figsize=(6, 4))
@@ -75,11 +79,11 @@ def plot_delivery_cdf(latencies, outdir):
 
 
 # =========================
-# Plot: Delivery Curve
+# Plot 2: Delivery Percentage Over Time
 # =========================
 
-def plot_delivery_curve(latencies, outdir):
-    xs = sorted(latencies)
+def plot_delivery_curve(delivery_latencies, outdir):
+    xs = sorted(delivery_latencies)
     ys = [i / len(xs) for i in range(len(xs))]
 
     plt.figure(figsize=(6, 4))
@@ -94,7 +98,7 @@ def plot_delivery_curve(latencies, outdir):
 
 
 # =========================
-# Plot: Message Overhead
+# Plot 3: Message Overhead
 # =========================
 
 def plot_overhead(sends, recvs, outdir):
@@ -117,48 +121,50 @@ def plot_overhead(sends, recvs, outdir):
     plt.bar(df["node"], df["messages"])
     plt.xticks(rotation=90)
     plt.ylabel("Messages")
-    plt.title("Message Overhead")
+    plt.title("Message Overhead (total sends+recvs)")
     plt.grid(True, axis="y")
     plt.savefig(os.path.join(outdir, "overhead.png"))
     plt.close()
 
 
-# =========================
-# Plot: Node Delivery Table (pretty version)
-# =========================
+# ===============================
+# NEW: Node-level delivery times
+# ===============================
 
-def plot_node_delivery_table(delivery_times_s, outdir):
-    """
-    Makes a table plot that scales to 50/100 nodes.
-    Much cleaner than a bar graph.
-    """
+def plot_node_delivery_times(delivery_latencies_dict, outdir):
     df = pd.DataFrame({
-        "node": list(delivery_times_s.keys()),
-        "latency_s": list(delivery_times_s.values())
-    }).sort_values("node")
+        "Node": list(delivery_latencies_dict.keys()),
+        "Latency (s)": list(delivery_latencies_dict.values())
+    }).sort_values("Node")
 
+    # Save CSV (unchanged)
     df.to_csv(os.path.join(outdir, "node_delivery_times.csv"), index=False)
 
-    fig, ax = plt.subplots(figsize=(8, len(df) * 0.25 + 1))
-    ax.axis('tight')
-    ax.axis('off')
+    # ---- NEW: Table plot ----
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.axis("off")
 
     table = ax.table(
         cellText=df.values,
         colLabels=df.columns,
-        loc='center'
+        loc="center",
+        cellLoc="center"
     )
 
     table.auto_set_font_size(False)
     table.set_fontsize(10)
+    table.scale(1, 1.5)
 
-    plt.savefig(os.path.join(outdir, "node_delivery_table.png"), bbox_inches='tight')
+    plt.title("Node Delivery Times Table", pad=20)
+    plt.savefig(os.path.join(outdir, "node_delivery_times_table.png"), dpi=200, bbox_inches="tight")
     plt.close()
 
 
-# =========================
-# Plot: Message rate over time
-# =========================
+
+
+# ===============================
+# NEW: Message rate over time
+# ===============================
 
 def plot_message_rate(sends, recvs, inject_ts, outdir, bucket_size=0.2):
     times = [(ev["ts"] - inject_ts) / 1e9 for ev in (sends + recvs)]
@@ -176,7 +182,7 @@ def plot_message_rate(sends, recvs, inject_ts, outdir, bucket_size=0.2):
     })
     df.to_csv(os.path.join(outdir, "message_rate.csv"), index=False)
 
-    plt.figure(figsize=(9, 4))
+    plt.figure(figsize=(10, 4))
     plt.plot(bins[:-1], hist)
     plt.grid(True)
     plt.xlabel("Time (s)")
@@ -186,9 +192,9 @@ def plot_message_rate(sends, recvs, inject_ts, outdir, bucket_size=0.2):
     plt.close()
 
 
-# =========================
-# Zombie detection
-# =========================
+# ===============================
+# NEW: Zombie detection report
+# ===============================
 
 def zombie_report(delivery_dict, sends, recvs, total_hosts, outdir):
     delivered_nodes = set(delivery_dict.keys())
@@ -201,19 +207,20 @@ def zombie_report(delivery_dict, sends, recvs, total_hosts, outdir):
     no_send = all_nodes - senders
     no_recv = all_nodes - receivers
 
-    report = [
-        f"Total hosts: {total_hosts}",
-        f"Delivered: {len(delivered_nodes)}/{total_hosts}",
-        f"Zombie nodes (never delivered): {sorted(zombies)}",
-        f"Nodes that never sent: {sorted(no_send)}",
-        f"Nodes that never received: {sorted(no_recv)}",
-    ]
+    report = []
+    report.append(f"Total hosts: {total_hosts}")
+    report.append(f"Delivered: {len(delivered_nodes)}/{total_hosts}")
+    report.append(f"Zombie nodes (never delivered): {sorted(zombies)}")
+    report.append(f"Nodes that never sent: {sorted(no_send)}")
+    report.append(f"Nodes that never received: {sorted(no_recv)}")
 
     with open(os.path.join(outdir, "zombie_report.txt"), "w") as f:
         f.write("\n".join(report))
 
+    # Bar chart
     plt.figure(figsize=(4, 4))
-    plt.bar(["Delivered", "Not Delivered"], [len(delivered_nodes), len(zombies)])
+    plt.bar(["Delivered", "Not Delivered"],
+            [len(delivered_nodes), len(zombies)])
     plt.title("Zombie Bar Chart")
     plt.savefig(os.path.join(outdir, "zombie_bar.png"))
     plt.close()
@@ -242,17 +249,23 @@ def main():
         print("[ERROR] No inject event found")
         return
 
-    delivery_latencies = [(ts - inject_ts) / 1e9 for ts in delivery_dict.values()]
+    delivery_latencies = [
+        (ts - inject_ts) / 1e9
+        for ts in delivery_dict.values()
+    ]
 
-    # Save convergence
+    # save convergence
     with open(os.path.join(outdir, "convergence.txt"), "w") as f:
-        f.write(str(max(delivery_latencies)) if delivery_latencies else "0")
+        if delivery_latencies:
+            f.write(str(max(delivery_latencies)))
+        else:
+            f.write("0")
 
     # Plots
     if delivery_latencies:
         plot_delivery_cdf(delivery_latencies, outdir)
         plot_delivery_curve(delivery_latencies, outdir)
-        plot_node_delivery_table(
+        plot_node_delivery_times(
             {node: (ts - inject_ts) / 1e9 for node, ts in delivery_dict.items()},
             outdir
         )
@@ -260,7 +273,9 @@ def main():
     plot_overhead(sends, recvs, outdir)
     plot_message_rate(sends, recvs, inject_ts, outdir)
 
-    zombie_report(delivery_dict, sends, recvs, args.min_hosts, outdir)
+    # Zombie report
+    total_hosts = max(args.min_hosts, len(set(ev["node"] for ev in logs)))
+    zombie_report(delivery_dict, sends, recvs, total_hosts, outdir)
 
 
 if __name__ == "__main__":

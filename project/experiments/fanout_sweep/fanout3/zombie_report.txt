@@ -1,5 +1,0 @@
-Total hosts: 20
-Delivered: 19/20
-Zombie nodes (never delivered): ['19']
-Nodes that never sent: ['19']
-Nodes that never received: ['19']

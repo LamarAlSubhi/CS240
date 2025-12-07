@@ -101,8 +101,8 @@ def load_suite_config(name):
 
     if name == "fanout_sweep":
         return [
-            {"name": f"fanout{f}", "hosts": 20, "bw": 10, "delay": "10ms", "loss": 0, "fanout": f}
-            for f in [1, 2, 3, 4, 5]
+            {"name": f"fanout{f}", "hosts": 100, "bw": 10, "delay": "10ms", "loss": 0, "fanout": f}
+            for f in [1, 2, 4, 8, 16, 32]
         ]
 
     if name == "loss_sweep":
